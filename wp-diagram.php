@@ -13,14 +13,14 @@ class WP_Diagram {
     var $plugin_basename;
     var $plugin_dir_path;
     var $errors;
-    var $pages;
+    var $positions;
 
     function WP_Diagram() {
 
         $this->plugin_basename = plugin_basename( __FILE__ );
         $this->plugin_dir_path = plugin_dir_path( __FILE__ );
         $this->errors = array();
-        $this->pages = array();
+        $this->positions = array();
 
         if ( is_admin() ) {
             add_action( 'admin_menu', array( $this, 'admin_menu' ) );
@@ -52,7 +52,7 @@ function wp_diagram_init() {
 }
 add_action( 'plugins_loaded', 'wp_diagram_init' );
 
-function wp_diagram_register_pages( $pages = array() ) {
+function wp_diagram_register_positions( $positions = array() ) {
     global $wp_diagram;
 
     if ( ! class_exists( 'WP_Diagram' )
@@ -60,27 +60,17 @@ function wp_diagram_register_pages( $pages = array() ) {
         WP_Diagram::error_fatal( __( 'Plugin instantiation error.', 'wp_diagram' ) );
 
     if ( empty( $pages ) || ! is_array( $pages ) )
-        $wp_diagram->error_fatal( __( 'No parameter set.', 'wp_diagram' ) );
+        $wp_diagram->error_fatal( __( 'No parameter set for position declaration.', 'wp_diagram' ) );
 
-    $required = array( 'id', 'name', 'front_templates', 'admin_templates' );
+    $required = array( 'id', 'name' );
 
-    foreach( $pages as $page ) {
-
+    foreach( $positions as $position ) {
         foreach ( $required as $r )
-            if ( empty ( $page[ $r ] ) )
-                $wp_diagram->error_fatal( sprintf( __( 'Missing "%s" argument on page registration.', 'wp_diagram' ), $r ) );
-
-        if ( count( $page['front_templates']) != count( $page['admin_templates'] ) )
-            $wp_diagram->error_fatal( __( 'Wrong array count for "front_templates"
-                and "admin_templates on page registration. Please register arrays
-                from same sizes in both options.', 'wp_diagram' ) );
-
-        foreach( array_merge( $page['front_templates'], $page['admin_templates'] ) as $template )
-            if ( ! locate_template( $template ) )
-                $wp_diagram->error_fatal( sprintf( __('Could not find the "%s.php" template file.', 'wp_diagram' ), $template ) );
-
+            if ( empty ( $position[ $r ] ) )
+                $wp_diagram->error_fatal( sprintf( __( 'Missing "%s" argument on position registration.', 'wp_diagram' ), $r ) );
     }
 
-    // Valid pages declaration
-    $wp_diagram->pages = $pages;
+    // Valid positions
+    $wp_diagram->positions = array();
+
 }
