@@ -31,8 +31,6 @@ class WP_Diagram {
     function admin_menu() {
         add_menu_page( __( 'Diagramming', 'wp_diagram' ), __( 'Diagramming', 'wp_diagram' ),
             'add_users', 'wp_diagram', array( $this, 'admin_post_positions' ), false, 6);
-        //add_submenu_page( 'wp_diagram', __( 'Post Positions', 'wp_diagram' ), __( 'Templates', 'wp_diagram' ),
-            //'add_users', 'wp_diagram_templates', array( $this, 'admin_templates' ) );
     }
 
     function admin_post_positions() {
@@ -59,7 +57,7 @@ function wp_diagram_register_positions( $positions = array() ) {
         || 'WP_Diagram' !== get_class( $wp_diagram ) )
         WP_Diagram::error_fatal( __( 'Plugin instantiation error.', 'wp_diagram' ) );
 
-    if ( empty( $pages ) || ! is_array( $pages ) )
+    if ( empty( $positions ) || ! is_array( $positions ) )
         $wp_diagram->error_fatal( __( 'No parameter set for position declaration.', 'wp_diagram' ) );
 
     $required = array( 'id', 'name' );
@@ -71,6 +69,6 @@ function wp_diagram_register_positions( $positions = array() ) {
     }
 
     // Valid positions
-    $wp_diagram->positions = array();
+    $wp_diagram->positions = $positions;
 
 }
