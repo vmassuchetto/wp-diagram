@@ -6,34 +6,14 @@
     <?php if ( ! empty( $wp_diagram->positions ) ) : ?>
 
         <div id="poststuff">
-        <div id="post-body" class="metabox-holder columns-2">
-
+        <div id="post-body" class="metabox-holder columns-1">
         <div id="post-body-content">
 
         <?php foreach($wp_diagram->positions as $position) : ?>
-            <div class="stuffbox" id="position-<?php echo $position['id']; ?>">
-            <h3><label for="link_name"><?php echo $position['name']; ?></label></h3>
-            <div class="inside">
-                <div class="drag-here"></div>
-            </div>
-            </div>
+            <?php include( $wp_diagram->plugin_dir_path . '/admin/position.php' ); ?>
         <?php endforeach; ?>
 
         </div><!-- #post-body-content -->
-
-        <div class="postbox-container" id="postbox-container-1">
-        <div class="meta-box-sortables ui-sortable" id="side-sortables">
-
-            <div class="postbox">
-            <h3 class="hndle"><span><?php _e( 'Search Posts', 'wp_diagram' ); ?></span></h3>
-            <div class="inside">
-                <input type="text" name="post-search" />
-            </div>
-            </div>
-
-        </div>
-        </div>
-
         </div><!-- #post-body -->
         </div><!-- #poststuff -->
 
