@@ -10,6 +10,7 @@
 
 class WP_Diagram {
 
+    var $plugin_docs_url;
     var $plugin_basename;
     var $plugin_dir_path;
     var $errors;
@@ -17,6 +18,7 @@ class WP_Diagram {
 
     function WP_Diagram() {
 
+        $this->plugin_docs_url = 'http://vinicius.soylocoporti.org.br/wp-diagram-wordpress-plugin';
         $this->plugin_basename = plugin_basename( __FILE__ );
         $this->plugin_dir_path = plugin_dir_path( __FILE__ );
         $this->errors = array();
