@@ -21,13 +21,27 @@ class WP_Diagram {
         $this->plugin_docs_url = 'http://vinicius.soylocoporti.org.br/wp-diagram-wordpress-plugin';
         $this->plugin_basename = plugin_basename( __FILE__ );
         $this->plugin_dir_path = plugin_dir_path( __FILE__ );
+        $this->plugin_dir_url = plugin_dir_url( __FILE__ );
         $this->errors = array();
         $this->positions = array();
 
         if ( is_admin() ) {
+            add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
             add_action( 'admin_menu', array( $this, 'admin_menu' ) );
+            add_action( 'wp_ajax_wp_diagram_post_search', array( $this, 'post_search' ) );
         }
 
+    }
+
+    function admin_enqueue_scripts() {
+        if ( ! empty( $_GET['page'] ) && 'wp_diagram' == $_GET['page'] ) {
+            wp_enqueue_script( 'jquery' );
+            wp_enqueue_script( 'jquery-ui-core' );
+            wp_enqueue_script( 'jquery-ui-autocomplete' );
+            wp_enqueue_script( 'jquery-ui-datepicker' );
+            wp_enqueue_script( 'jquery-ui-slider' );
+            wp_enqueue_script( 'wp-diagram', $this->plugin_dir_url . 'js/wp-diagram.js' );
+        }
     }
 
     function admin_menu() {
