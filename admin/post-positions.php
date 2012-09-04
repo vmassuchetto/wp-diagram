@@ -40,8 +40,9 @@
     <?php else : ?>
 
         <div class="updated"><p>
-            <?php _e( 'No positions declared in your theme. Please read
-                the documentation to check how to declare them.', 'wp_diagram' ); ?>
+            <?php _e( sprintf( 'No positions declared in your theme. Please read
+                the <a href="%s">documentation</a> to see how to
+                declare them.', $wp_diagram->plugin_docs_url ), 'wp_diagram' ); ?>
         </p></div>
 
     <?php endif; ?>
