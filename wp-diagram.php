@@ -53,6 +53,37 @@ class WP_Diagram {
         include( $this->plugin_dir_path . 'admin/post-positions.php' );
     }
 
+    function post_search() {
+        if ( empty( $_GET['term'] ) )
+            return false;
+        $query = sanitize_text_field( $_GET['term'] );
+
+        global $post, $wpdb;
+        $sql = $wpdb->prepare("
+            SELECT ID
+            FROM {$wpdb->posts}
+            WHERE 1=1
+                AND post_title LIKE '%%%s%%'
+                AND post_status IN ('publish', 'future')
+            LIMIT 15
+        ", $query );
+        $posts = $wpdb->get_results( $sql );
+
+        $response = array();
+        foreach( $posts as $p ) {
+            $post = get_post( $p->ID );
+            setup_postdata( $post );
+            $response[] = array(
+                'id' => get_the_ID(),
+                'label' => get_the_title(),
+                'value' => ''
+            );
+        }
+        echo json_encode( $response );
+
+        exit;
+    }
+
     function error_fatal( $error_message ) {
         $error = new WP_Error( 'wp_diagram', 'wp_diagram: ' . $error_message );
         wp_die( $error );
