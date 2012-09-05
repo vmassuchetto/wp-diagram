@@ -82,7 +82,7 @@ class WP_Diagram {
     }
 
     function admin_post_positions() {
-        include( $this->plugin_dir_path . 'admin/post-positions.php' );
+        include( $this->plugin_dir_path . 'admin/positions.php' );
     }
 
     /* General Functions */
