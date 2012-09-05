@@ -78,7 +78,7 @@ class WP_Diagram {
 
     function admin_menu() {
         add_menu_page( __( 'Diagramming', 'wp_diagram' ), __( 'Diagramming', 'wp_diagram' ),
-            'add_users', 'wp_diagram', array( $this, 'admin_post_positions' ), false, 6);
+            'add_users', 'wp_diagram', array( $this, 'admin_post_positions' ), false, 6 );
     }
 
     function admin_post_positions() {
@@ -117,7 +117,7 @@ class WP_Diagram {
 
     function post_search() {
         if ( empty( $_GET['term'] ) )
-            return false;
+            return 0;
         $query = sanitize_text_field( $_GET['term'] );
 
         global $post, $wpdb;
