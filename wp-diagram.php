@@ -40,7 +40,13 @@ class WP_Diagram {
             wp_enqueue_script( 'jquery-ui-autocomplete' );
             wp_enqueue_script( 'jquery-ui-datepicker' );
             wp_enqueue_script( 'jquery-ui-slider' );
+            wp_enqueue_script( 'jquery-ui-timepicker',
+                $this->plugin_dir_url . 'js/jquery-ui-timepicker-addon.js',
+                array( 'jquery-ui-core', 'jquery-ui-slider', 'jquery-ui-datepicker' ) );
             wp_enqueue_script( 'wp-diagram', $this->plugin_dir_url . 'js/wp-diagram.js' );
+
+            wp_enqueue_style( 'jquery-style', $this->plugin_dir_url . 'css/jquery-ui.css' );
+            wp_enqueue_style( 'wp-diagram', $this->plugin_dir_url . 'css/wp-diagram.css' );
         }
     }
 
