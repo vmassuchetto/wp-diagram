@@ -146,9 +146,44 @@ class WP_Diagram {
         exit;
     }
 
-    function error_fatal( $error_message ) {
-        $error = new WP_Error( 'wp_diagram', 'wp_diagram: ' . $error_message );
-        wp_die( $error );
+    function add_schedule() {
+        if ( empty( $_POST['date'] ) || empty( $_POST['position'] ) )
+            return 0;
+        $date = sanitize_text_field( $_POST['date'] );
+        $position = sanitize_text_field( $_POST['position'] );
+
+        if ( ! $time = strtotime($date) )
+            return 0;
+
+        $args = array(
+            'post_type' => $this->type_schedule,
+            'post_title' => $position,
+            'post_date' => $date,
+            'post_status' => 'publish',
+            'post_content' => '',
+        );
+        echo wp_insert_post( $args );
+        exit;
+    }
+
+    function update_position() {
+        if ( empty( $_POST['date'] ) || empty( $_POST['position'] ) )
+            return 0;
+
+        global $date, $position, $wp_diagram;
+
+        $date = sanitize_text_field( $_POST['date'] );
+        $position_id = sanitize_text_field( $_POST['position'] );
+
+        foreach( $wp_diagram->positions as $p ) {
+            if ( $position_id == $p['id'] ) {
+                $position = $p;
+                break;
+            }
+        }
+
+        include( $this->plugin_dir_path . 'admin/position.php' );
+        exit;
     }
 
 }
