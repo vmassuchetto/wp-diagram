@@ -85,6 +85,36 @@ class WP_Diagram {
         include( $this->plugin_dir_path . 'admin/post-positions.php' );
     }
 
+    /* General Functions */
+
+    function get_schedule( $position ) {
+        if (empty ($position) )
+            return false;
+        $position = sanitize_text_field( $position );
+
+        global $wpdb;
+
+        $sql = $wpdb->prepare("
+            SELECT
+                ID AS id,
+                post_title AS position,
+                post_content AS posts,
+                post_date AS date
+            FROM
+                $wpdb->posts
+            WHERE 1=1
+                AND post_type = '%s'
+                AND post_title = '%s'
+                AND post_date > NOW()
+            ORDER BY date ASC
+        ", $this->type_schedule, $position );
+        if ( $schedule = $wpdb->get_results( $sql ) )
+            return $schedule;
+        return false;
+    }
+
+    /* Ajax Actions */
+
     function post_search() {
         if ( empty( $_GET['term'] ) )
             return false;
