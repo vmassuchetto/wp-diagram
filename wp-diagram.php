@@ -1,11 +1,11 @@
 <?php
 /*
 * Plugin Name: WP-Diagram
-* Plugin URI:
-* Description:
+* Plugin URI: http://vinicius.soylocoporti.org.br/wp-diagram-wordpress-plugin
+* Description: Posts diagramming and schedulling across independent positions.
 * Version: 0.01
 * Author: Vinicius Massuchetto
-* Author URI: http://vinicius.soylocoporti.org.br/wp-diagram-wordpress-plugin
+* Author URI: http://vinicius.soylocoporti.org.br
 */
 
 class WP_Diagram {
