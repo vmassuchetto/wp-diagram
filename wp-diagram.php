@@ -32,7 +32,10 @@ class WP_Diagram {
         if ( is_admin() ) {
             add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
             add_action( 'admin_menu', array( $this, 'admin_menu' ) );
-            add_action( 'wp_ajax_wp_diagram_post_search', array( $this, 'post_search' ) );
+
+            $ajax_actions = array( 'post_search', 'add_schedule', 'update_position' );
+            foreach( $ajax_actions as $a )
+                add_action( 'wp_ajax_wp_diagram_' . $a, array( $this, $a ) );
         }
 
     }
