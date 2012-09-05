@@ -15,6 +15,7 @@ class WP_Diagram {
     var $plugin_dir_path;
     var $errors;
     var $positions;
+    var $type_schedule;
 
     function WP_Diagram() {
 
@@ -24,6 +25,9 @@ class WP_Diagram {
         $this->plugin_dir_url = plugin_dir_url( __FILE__ );
         $this->errors = array();
         $this->positions = array();
+        $this->type_schedule = 'wp_diagram_schedule';
+
+        $this->register_structure();
 
         if ( is_admin() ) {
             add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
@@ -32,6 +36,25 @@ class WP_Diagram {
         }
 
     }
+
+    /* Plugin Structure */
+
+    function error_fatal( $error_message ) {
+        $error = new WP_Error( 'wp_diagram', 'wp_diagram: ' . $error_message );
+        wp_die( $error );
+    }
+
+    function register_structure() {
+        register_post_type( $this->type_schedule, array(
+            'public' => false,
+            'publicly_queryable' => false,
+            'exclude_from_search' => true,
+            'show_ui' => false,
+            'rewrite' => false
+        ) );
+    }
+
+    /* Admin */
 
     function admin_enqueue_scripts() {
         if ( ! empty( $_GET['page'] ) && 'wp_diagram' == $_GET['page'] ) {
