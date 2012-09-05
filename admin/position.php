@@ -27,6 +27,21 @@
     <a id="position-<?php echo $position['id']; ?>-add-schedule"
         class="button position-add-schedule">
         <?php _e( 'Add New Schedule', 'wp_diagram'); ?></a>
+    <div id="position-<?php echo $position['id']; ?>-datetime-wrap"
+        class="position-datetime-wrap">
+    <div id="position-<?php echo $position['id']; ?>-datetime"
+        class="position-datetime">
+        <?php
+            global $post;
+            $post = (object) array(
+                'post_status' => 'publish',
+                'post_date' => date( 'Y-m-d H:i:s' ),
+                'post_date_gmt' => date( 'Y-m-d H:i:s' )
+            );
+            touch_time(true, true);
+        ?>
+    </div><!-- .position-datetime -->
+    </div><!-- .position-datetime-wrap -->
 
     <a id="position-<?php echo $position['id']; ?>-delete-schedule"
         class="deletion position-delete-schedule">
