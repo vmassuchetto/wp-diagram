@@ -10,7 +10,10 @@
         <div id="post-body-content">
 
         <?php foreach($wp_diagram->positions as $position) : ?>
-            <?php include( $wp_diagram->plugin_dir_path . '/admin/position.php' ); ?>
+            <div id="position-<?php echo $position['id']; ?>-wrap"
+                class="position-wrap">
+                <?php include( $wp_diagram->plugin_dir_path . '/admin/position.php' ); ?>
+            <div>
         <?php endforeach; ?>
 
         </div><!-- #post-body-content -->
