@@ -204,12 +204,21 @@ function wp_diagram_register_positions( $positions = array() ) {
     if ( empty( $positions ) || ! is_array( $positions ) )
         $wp_diagram->error_fatal( __( 'No parameter set for position declaration.', 'wp_diagram' ) );
 
+    $used = array();
     $required = array( 'id', 'name' );
 
     foreach( $positions as $position ) {
-        foreach ( $required as $r )
+        foreach ( $required as $r ) {
             if ( empty ( $position[ $r ] ) )
-                $wp_diagram->error_fatal( sprintf( __( 'Missing "%s" argument on position registration.', 'wp_diagram' ), $r ) );
+                $wp_diagram->error_fatal(
+                    sprintf( __( 'Missing "%s" argument on position registration.', 'wp_diagram' ), $r ) );
+        }
+        if ( preg_match( '/[^A-Za-z0-9_]/', $position['id'] ) )
+            $wp_diagram->error_fatal(
+                sprintf( __( 'Please provide position IDs with only characters, numbers and underscores.', 'wp_diagram' ), $r ) );
+        if ( in_array( $position['id'], $used ) )
+            $wp_diagram->error_fatal(
+                sprintf( __( 'Position IDs are meant to be unique. You\'re providing duplicated ones.', 'wp_diagram' ), $r ) );
     }
 
     // Valid positions
