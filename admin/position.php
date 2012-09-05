@@ -10,11 +10,19 @@
         name="position-<?php echo $position['id']; ?>-add-post"
         value="<?php _e( 'Search by post title', 'wp_diagram' ); ?>" />
 
-    <?php _e( 'Schedule', 'wp_diagram' ); ?>&nbsp;
-    <select id="position-<?php echo $position['id']; ?>-select-schedule"
-        class="position-select-schedule"
-        name="position-<?php echo $position['id']; ?>-schedule">
-    </select>
+    <?php if ( $schedule = $wp_diagram->get_schedule( $position['id'] ) ) : $i = 0; ?>
+        <?php _e( 'Schedule', 'wp_diagram' ); ?>&nbsp;
+        <select id="position-<?php echo $position['id']; ?>-select-schedule"
+            class="position-select-schedule"
+            name="position-<?php echo $position['id']; ?>-schedule">
+                <?php foreach( $schedule as $s ) : $i++; ?>
+                    <option value="<?php echo $s->date; ?>"
+                        <?php echo( (! isset( $date ) && $i == 1) || ( isset( $date ) && $date == $s->date ) ) ? 'selected' : ''; ?>>
+                        <?php echo mysql2date('j M Y H:i', $s->date ); ?>
+                    </option>
+                <?php endforeach; ?>
+        </select>
+    <?php endif; ?>
 
     <a id="position-<?php echo $position['id']; ?>-add-schedule"
         class="button position-add-schedule">
