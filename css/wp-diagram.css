@@ -19,6 +19,6 @@
 .wp-diagram .post .trash a { color:#BC0B0B; }
 .wp-diagram .post .trash a:hover { color:#FF0000; }
 .wp-diagram .posts .ui-sortable-helper { border:1px solid #CCCCCC; background-color:#FFFFFF; }
-.wp-diagram .posts .ui-state-highlight { display:block; height:80px; }
+.wp-diagram .posts .ui-state-highlight { background:#FFE49A; display:block; height:80px; }
 
 

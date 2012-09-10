@@ -62,41 +62,15 @@
 
 <?php if ( $posts ) : ?>
     <ul class="posts">
-        <?php $i = 0; foreach( $posts as $p ) : $i++; ?>
-            <?php if ( ! $post = get_post( $p->ID ) ) continue; ?>
-            <li id="post-<?php echo $p->ID; ?>" valign="top"
-                class="post<?php echo ( $i % 2 ) ? ' alt' : ''; ?> format-standard">
-
-            <div class="thumbnail">
-                <?php
-                    if ( has_post_thumbnail( $p->ID ) )
-                        the_post_thumbnail( array( 64, 64 ) );
-                ?>
-            </div>
-
-            <div>
-                <strong><?php the_title(); ?></strong>
-                <div class="row-actions">
-                    <span class="edit"><?php edit_post_link(); ?> | </span>
-                    <span class="trash">
-                        <a id="position-<?php echo $position['id']; ?>-delete-post-<?php the_ID(); ?>"
-                            class="position-delete-post"
-                            href="javascript:void(0);">
-                            <?php _e( 'Remove from scheduling', 'wp_diagram' ); ?>
-                        </a>&nbsp;|&nbsp;
-                    </span>
-                    <span class="view">
-                        <a rel="permalink"
-                            title="<?php the_title(); ?>"
-                            href="<?php the_permalink(); ?>">
-                            <?php _e( 'View post', 'wp_diagram' ); ?>
-                        </a>
-                    </span>
-                </div>
-            </div>
-
-            </li>
-        <?php endforeach; ?>
+        <?php
+            $i = 0;
+            foreach( $posts as $p ) {
+                $i++;
+                if ( ! $post = get_post( $p->ID ) )
+                    continue;
+                include( $this->plugin_dir_path . 'admin/post.php' );
+            }
+        ?>
     </table>
 <?php endif; ?>
 </div><!-- .postbox -->

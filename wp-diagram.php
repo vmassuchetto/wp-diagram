@@ -208,6 +208,7 @@ class WP_Diagram {
             $response[] = array(
                 'id' => get_the_ID(),
                 'label' => get_the_title(),
+                'date' => get_the_date(),
                 'value' => ''
             );
         }
@@ -417,5 +418,11 @@ function wp_diagram_register_positions( $positions = array() ) {
 
     // Valid positions
     $wp_diagram->positions = $registered_positions;
+
+}
+
+function wp_diagram_get_posts( $position ) {
+    global $wp_diagram;
+
 
 }
