@@ -93,6 +93,24 @@ function wp_diagram_blink_position(position, color) {
         1000
     );
 }
+
+function wp_diagram_change_order(position) {
+    var order = [];
+    schedule = jQuery('#position-' + position + '-select-schedule').val();
+    item = jQuery('#position-' + position + ' li:first');
+    for (i = 0; item.length; i++) {
+        matches = item.attr('id').match(/^post-(.+)$/);
+        order[i] = matches[1];
+        item = item.next('li');
+    }
+    order = order.join(',');
+    jQuery.ajax({
+        url: ajaxurl,
+        type: 'POST',
+        data: {
+            action: 'wp_diagram_change_order',
+            schedule: schedule,
+            order: order
         }
     });
 }
@@ -107,7 +125,8 @@ function wp_diagram_position_triggers(position) {
     jQuery('#position-' + position).sortable({
         items: 'li',
         placeholder: 'ui-state-highlight',
-        stop: function(e, ui) {
+        update: function(e, ui) {
+            wp_diagram_change_order(position);
         }
     });
 }

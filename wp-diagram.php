@@ -34,7 +34,7 @@ class WP_Diagram {
             add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 
             $ajax_actions = array( 'post_search', 'add_schedule', 'delete_schedule',
-                'add_post', 'delete_post', 'update_position' );
+                'add_post', 'delete_post', 'change_order', 'update_position' );
             foreach( $ajax_actions as $a )
                 add_action( 'wp_ajax_wp_diagram_' . $a, array( $this, $a ) );
         }
@@ -276,6 +276,40 @@ class WP_Diagram {
             SET post_content = '%s'
             WHERE ID = '%s'
         ", $posts, $schedule->id );
+        if ( $wpdb->query( $sql ) )
+            echo 1;
+        exit;
+    }
+
+    function change_order( $args = false ) {
+        global $wpdb;
+
+        $defaults = array(
+            'order' => false,
+            'schedule' => false
+        );
+        if ( ! $args )
+            $args = $_POST;
+        $args = wp_parse_args( $args, $defaults );
+        $args['schedule'] = intval( $args['schedule'] );
+        $args['order'] = array_filter( explode( ',', $args['order'] ), 'ctype_digit');
+        if ( ! $args['schedule'] || ! $args['order']
+            || ! $schedule = $this->get_schedule( array( 'schedule' => $args['schedule'] ) ) )
+            exit;
+
+        $posts = json_decode( $schedule->posts, true );
+        $sorted = array();
+        foreach ( $args['order'] as $o ) {
+            $sorted[$o] = $posts[$o];
+        }
+
+        $posts = json_encode( $sorted );
+        $sql = $wpdb->prepare("
+            UPDATE {$wpdb->posts}
+            SET post_content = '%s'
+            WHERE ID = '%s'
+        ", $posts, $args['schedule'] );
+
         if ( $wpdb->query( $sql ) )
             echo 1;
         exit;
