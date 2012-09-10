@@ -96,19 +96,65 @@ class WP_Diagram {
 
     /* General Functions */
 
+    function get_schedule_sql_select() {
+        return "
+            ID AS id,
+            post_title AS position,
+            post_content AS posts,
+            post_date AS date
+        ";
+    }
+
+    function get_current_schedule( $args = false ) {
+        global $wpdb;
+
+        $defaults = array(
+            'position' => false
+        );
+        $args = wp_parse_args( $args, $defaults );
+        if ( ! $args['position'] )
+            return false;
+
+        $select = $this->get_schedule_sql_select();
+        $sql = $wpdb->prepare( "
+            SELECT {$select}
+            FROM {$wpdb->posts}
+            WHERE 1=1
+                AND post_type = '%s'
+                AND post_title = '%s'
+                AND post_date < 'NOW()'
+            ORDER BY date ASC
+            LIMIT 1
+        ", $this->type_schedule, $args['position'] );
+        $schedule = $wpdb->get_results( $sql );
+
+        if ( ! empty( $schedule[0] ) ) {
+            $schedule[0]->current = true;
+            return $schedule[0];
+        }
+        return false;
+    }
+
     function get_schedule( $args = false ) {
+        global $wpdb;
+
         $defaults = array(
             'position' => false,
             'schedule' => false
         );
         $args = wp_parse_args( $args, $defaults );
 
-        global $wpdb;
+        $schedules = array();
+        if ( $s = $this->get_current_schedule( $args ) )
+            $schedules[ $s->id ] = $s;
+
+        $select = $this->get_schedule_sql_select();
 
         if ( ! empty( $args['schedule'] ) ) {
             $where = $wpdb->prepare( "
                 AND ID = '%s'
             ", $args['schedule'] );
+            $limit = ' LIMIT 1 ';
 
         } elseif ( ! empty( $args['position'] ) ) {
             $where = $wpdb->prepare( "
@@ -116,28 +162,25 @@ class WP_Diagram {
                 AND post_title = '%s'
                 AND post_date > NOW()
             ", $this->type_schedule, $args['position'] );
+            $limit = '';
         }
 
         if ( ! $where )
             return false;
 
         $sql = "
-            SELECT
-                ID AS id,
-                post_title AS position,
-                post_content AS posts,
-                post_date AS date
-            FROM
-                $wpdb->posts
+            SELECT {$select}
+            FROM {$wpdb->posts}
             WHERE 1=1 {$where}
             ORDER BY date ASC
+            {$limit}
         ";
-        if ( ! $schedule = $wpdb->get_results( $sql, OBJECT_K ) )
-            return false;
+        if ( $schedule = $wpdb->get_results( $sql, OBJECT_K ) )
+            $schedules = $schedules + $schedule;
 
         if ( ! empty( $args['schedule'] ) )
-            return $schedule[ key( $schedule ) ];
-        return $schedule;
+            return $schedules[ key( $schedules ) ];
+        return $schedules;
     }
 
     /* Ajax Actions */

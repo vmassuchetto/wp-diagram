@@ -27,7 +27,7 @@
             <?php foreach( $schedule as $s ) : ?>
                 <option value="<?php echo $s->id; ?>"
                     <?php echo ( $selected_schedule == $s->id ) ? ' selected="selected"' : ''; ?>>
-                    <?php echo mysql2date('j M Y H:i', $s->date ); ?>
+                    <?php echo ( ! empty( $s->current ) ) ? _e( 'Displaying Now', 'wp_diagram' ) : mysql2date('j M Y H:i', $s->date ); ?>
                 </option>
             <?php endforeach; ?>
         </select>
