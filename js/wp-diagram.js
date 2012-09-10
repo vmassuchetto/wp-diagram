@@ -1,3 +1,7 @@
+var green = '#D2FFCE';
+var yellow = '#FFE49A';
+var red = '#FF9AA3';
+var grey = '#BBBBBB';
 var values;
 values = {};
 
@@ -13,7 +17,7 @@ function wp_diagram_add_post(post, position) {
             schedule: schedule
         },
         success: function() {
-            wp_diagram_update_position(schedule, position);
+            wp_diagram_update_position(schedule, position, green);
         }
     });
 }
@@ -29,7 +33,7 @@ function wp_diagram_add_schedule(date, position) {
         },
         success: function(schedule) {
             if (schedule)
-                wp_diagram_update_position(schedule, position);
+                wp_diagram_update_position(schedule, position, green);
         }
     });
 }
@@ -43,7 +47,7 @@ function wp_diagram_delete_schedule(schedule, position) {
             schedule: schedule
         },
         success: function() {
-            wp_diagram_update_position(false, position);
+            wp_diagram_update_position(false, position, red);
         }
     });
 }
@@ -58,12 +62,12 @@ function wp_diagram_delete_post(schedule, post, position) {
             post: post
         },
         success: function() {
-            wp_diagram_update_position(schedule, position);
+            wp_diagram_update_position(schedule, position, red);
         }
     });
 }
 
-function wp_diagram_update_position(schedule, position) {
+function wp_diagram_update_position(schedule, position, color) {
     jQuery.ajax({
         url: ajaxurl,
         type: 'POST',
@@ -75,7 +79,20 @@ function wp_diagram_update_position(schedule, position) {
         success: function(data){
             obj = jQuery('#position-' + position + '-wrap');
             obj.html(data);
-            jQuery('#position-' + position + ' .misc-pub-section').effect('highlight', {}, 2000);
+            wp_diagram_blink_position(position, color);
+        }
+    });
+}
+
+function wp_diagram_blink_position(position, color) {
+    if (!color)
+        color = grey;
+    jQuery('#position-' + position + ' .misc-pub-section').effect(
+        'highlight',
+        { color: color},
+        1000
+    );
+}
         }
     });
 }
