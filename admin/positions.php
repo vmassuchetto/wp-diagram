@@ -1,5 +1,5 @@
 <?php global $wp_diagram; ?>
-<div class="wrap">
+<div class="wrap wp-diagram">
     <div class="icon32 icon32-posts-post" id="icon-edit"><br></div>
     <h2><?php _e( 'Post Positions', 'wp_diagram' ); ?></h2>
 

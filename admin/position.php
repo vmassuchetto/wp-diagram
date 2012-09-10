@@ -11,15 +11,16 @@
 
 <div class="misc-pub-section">
 
-    <?php _e( 'Add Post', 'wp_diagram' ); ?>:&nbsp;
-    <input id="position-<?php echo $position['id']; ?>-add-post"
-        type="text"
-        class="position-add-post"
-        name="position-<?php echo $position['id']; ?>-add-post"
-        value="<?php _e( 'Search by post title', 'wp_diagram' ); ?>" />
-
     <?php if ( $schedule ) : ?>
-        <?php _e( 'Schedule', 'wp_diagram' ); ?>&nbsp;
+
+        <?php _e( 'Add Post', 'wp_diagram' ); ?>:&nbsp;
+        <input id="position-<?php echo $position['id']; ?>-add-post"
+            type="text"
+            class="position-add-post"
+            name="position-<?php echo $position['id']; ?>-add-post"
+            value="<?php _e( 'Search by post title', 'wp_diagram' ); ?>" />
+
+        <?php _e( 'Scheduling', 'wp_diagram' ); ?>:&nbsp;
         <select id="position-<?php echo $position['id']; ?>-select-schedule"
             class="position-select-schedule"
             name="position-<?php echo $position['id']; ?>-schedule">
@@ -30,11 +31,12 @@
                 </option>
             <?php endforeach; ?>
         </select>
+
     <?php endif; ?>
 
     <a id="position-<?php echo $position['id']; ?>-add-schedule"
         class="button position-add-schedule">
-        <?php _e( 'Add New Schedule', 'wp_diagram'); ?></a>
+        <?php _e( 'Add New Scheduling', 'wp_diagram'); ?></a>
     <div id="position-<?php echo $position['id']; ?>-datetime-wrap"
         class="position-datetime-wrap">
     <div id="position-<?php echo $position['id']; ?>-datetime"
@@ -52,11 +54,47 @@
     </div><!-- .position-datetime-wrap -->
 
     <a id="position-<?php echo $position['id']; ?>-delete-schedule"
-        class="deletion position-delete-schedule">
-        <?php _e( 'Delete This Schedule', 'wp_diagram'); ?></a>
+        class="deletion position-delete-schedule"
+        href="javascript:void(0);">
+        <?php _e( 'Delete This Scheduling', 'wp_diagram'); ?></a>
 
-</div>
+</div><!-- .misc-pub-section -->
 
-<div class="inside">
-</div><!-- .inside -->
-</div><!-- .stuffbox -->
+<?php if ( $posts ) : ?>
+    <ul class="posts">
+        <?php $i = 0; foreach( $posts as $p ) : $i++; ?>
+            <?php if ( ! $post = get_post( $p->ID ) ) continue; ?>
+            <li id="post-<?php echo $p->ID; ?>" valign="top"
+                class="post<?php echo ( $i % 2 ) ? ' alt' : ''; ?> format-standard">
+
+            <div class="thumbnail">
+                <?php the_post_thumbnail( array( 64, 64 ) ); ?>
+            </div>
+
+            <div>
+                <strong><?php the_title(); ?></strong>
+                <div class="row-actions">
+                    <span class="edit"><?php edit_post_link(); ?> | </span>
+                    <span class="trash">
+                        <a id="position-<?php echo $position['id']; ?>-delete-post-<?php the_ID(); ?>"
+                            class="position-delete-post"
+                            href="javascript:void(0);">
+                            <?php _e( 'Remove from scheduling', 'wp_diagram' ); ?>
+                        </a>&nbsp;|&nbsp;
+                    </span>
+                    <span class="view">
+                        <a rel="permalink"
+                            title="<?php the_title(); ?>"
+                            href="<?php the_permalink(); ?>">
+                            <?php _e( 'View post', 'wp_diagram' ); ?>
+                        </a>
+                    </span>
+                </div>
+            </div>
+
+            </li>
+        <?php endforeach; ?>
+    </table>
+<?php endif; ?>
+</div><!-- .postbox -->
+<script type="text/javascript">wp_diagram_position_triggers('<?php echo $position['id']; ?>');</script>

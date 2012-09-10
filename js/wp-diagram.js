@@ -59,8 +59,23 @@ function wp_diagram_update_position(date, position) {
         },
         success: function(data){
             obj = jQuery('#position-' + position + '-wrap');
-            obj.fadeOut(100).delay(100).html(data).fadeIn(100);
-            wp_diagram_position_autocomplete(position);
+            obj.html(data);
+            jQuery('#position-' + position + ' .misc-pub-section').effect('highlight', {}, 2000);
+        }
+    });
+}
+
+function wp_diagram_position_triggers(position) {
+    wp_diagram_position_autocomplete(position);
+    jQuery('#position-' + position + ' .post').hover(function(){
+        jQuery(this).find('.row-actions').css('visibility', 'visible');
+    },function(){
+        jQuery(this).find('.row-actions').css('visibility', 'hidden');
+    });
+    jQuery('#position-' + position).sortable({
+        items: 'li',
+        placeholder: 'ui-state-highlight',
+        stop: function(e, ui) {
         }
     });
 }
@@ -86,7 +101,6 @@ function wp_diagram_position_autocomplete(position) {
             jQuery(this).val(values[jQuery(this).attr('name')]);
     });
 }
-
 
 jQuery(document).ready(function(){
 

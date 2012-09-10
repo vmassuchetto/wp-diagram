@@ -64,11 +64,19 @@ class WP_Diagram {
             wp_enqueue_script( 'jquery' );
             wp_enqueue_script( 'jquery-ui-core' );
             wp_enqueue_script( 'jquery-ui-autocomplete' );
+            wp_enqueue_script( 'jquery-ui-draggable' );
             wp_enqueue_script( 'jquery-ui-datepicker' );
             wp_enqueue_script( 'jquery-ui-slider' );
+            wp_enqueue_script( 'jquery-ui-effects-core',
+                $this->plugin_dir_url . 'js/jquery-ui-effects-core.js',
+                array( 'jquery-ui-core') );
+            wp_enqueue_script( 'jquery-ui-effects-highlight',
+                $this->plugin_dir_url . 'js/jquery-ui-effects-highlight.js',
+                array( 'jquery-ui-effects-core') );
             wp_enqueue_script( 'jquery-ui-timepicker',
                 $this->plugin_dir_url . 'js/jquery-ui-timepicker-addon.js',
-                array( 'jquery-ui-core', 'jquery-ui-slider', 'jquery-ui-datepicker' ) );
+                array( 'jquery-ui-core', 'jquery-ui-slider', 'jquery-ui-autocomplete',
+                    'jquery-ui-sortable', 'jquery-ui-datepicker' ) );
             wp_enqueue_script( 'wp-diagram', $this->plugin_dir_url . 'js/wp-diagram.js' );
 
             wp_enqueue_style( 'jquery-style', $this->plugin_dir_url . 'css/jquery-ui.css' );
@@ -77,7 +85,7 @@ class WP_Diagram {
     }
 
     function admin_menu() {
-        add_menu_page( __( 'Diagramming', 'wp_diagram' ), __( 'Diagramming', 'wp_diagram' ),
+        add_menu_page( __( 'Positioning', 'wp_diagram' ), __( 'Positioning', 'wp_diagram' ),
             'add_users', 'wp_diagram', array( $this, 'admin_post_positions' ), false, 6 );
     }
 

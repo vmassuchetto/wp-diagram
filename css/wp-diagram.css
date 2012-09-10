@@ -9,5 +9,16 @@
 .position-datetime-wrap { display:inline-block; }
 .position-datetime { display:none; }
 .position-datetime-wrap .timestamp-wrap,
-.position-datetime-wrap p { position:relative; display:inline-block; }
+.position-datetime-wrap p { position:relative; display:inline-block; margin:0; }
 .position-datetime-wrap .cancel-timestamp { display:none; }
+
+.wp-diagram ul { margin:0; }
+.wp-diagram .misc-pub-section { height:26px; line-height:26px; }
+.wp-diagram .post { min-height:64px; margin:0; padding:0; border-bottom:1px solid #DFDFDF; border-top:1px solid #FFFFFF; padding:9px 7px 11px; vertical-align:top; line-height:1.4em; }
+.wp-diagram .post .thumbnail { float:left; width:64px; height:64px; padding-right:15px; }
+.wp-diagram .post .trash a { color:#BC0B0B; }
+.wp-diagram .post .trash a:hover { color:#FF0000; }
+.wp-diagram .posts .ui-sortable-helper { border:1px solid #CCCCCC; background-color:#FFFFFF; }
+.wp-diagram .posts .ui-state-highlight { display:block; height:80px; }
+
+
