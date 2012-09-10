@@ -33,7 +33,8 @@ class WP_Diagram {
             add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
             add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 
-            $ajax_actions = array( 'post_search', 'add_schedule', 'update_position' );
+            $ajax_actions = array( 'post_search', 'add_schedule', 'delete_schedule',
+                'add_post', 'delete_post', 'update_position' );
             foreach( $ajax_actions as $a )
                 add_action( 'wp_ajax_wp_diagram_' . $a, array( $this, $a ) );
         }

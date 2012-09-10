@@ -6,7 +6,7 @@
     if ( ! empty( $selected_schedule ) && ! empty( $schedule[ $selected_schedule ]->posts ) )
         $posts = json_decode( $schedule[ $selected_schedule ]->posts );
 ?>
-<div class="postbox" id="position-<?php echo $position['id']; ?>">
+<div id="position-<?php echo $position['id']; ?>" class="postbox position">
 <h3><label for="link_name"><?php echo $position['name']; ?></label></h3>
 
 <div class="misc-pub-section">

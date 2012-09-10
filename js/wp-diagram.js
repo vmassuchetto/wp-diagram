@@ -43,12 +43,27 @@ function wp_diagram_delete_schedule(schedule, position) {
             schedule: schedule
         },
         success: function() {
-            wp_diagram_update_position(date, position);
+            wp_diagram_update_position(false, position);
         }
     });
 }
 
-function wp_diagram_update_position(date, position) {
+function wp_diagram_delete_post(schedule, post, position) {
+    jQuery.ajax({
+        url: ajaxurl,
+        type: 'POST',
+        data: {
+            action: 'wp_diagram_delete_post',
+            schedule: schedule,
+            post: post
+        },
+        success: function() {
+            wp_diagram_update_position(schedule, position);
+        }
+    });
+}
+
+function wp_diagram_update_position(schedule, position) {
     jQuery.ajax({
         url: ajaxurl,
         type: 'POST',
@@ -112,6 +127,18 @@ jQuery(document).ready(function(){
     jQuery('.position-add-schedule').live('click', function(){
         matches = jQuery(this).attr('id').match(/^position-(.+)-add-schedule$/);
         jQuery('#position-' + matches[1] + '-datetime').fadeIn(200);
+    });
+
+    jQuery('.position-delete-schedule').live('click', function(){
+        matches = jQuery(this).attr('id').match(/^position-(.+)-delete-schedule$/);
+        schedule = jQuery('#position-' + matches[1] + '-select-schedule').val();
+        wp_diagram_delete_schedule(schedule, matches[1]);
+    });
+
+    jQuery('.position-delete-post').live('click', function(){
+        matches = jQuery(this).attr('id').match(/^position-(.+)-delete-post-(.+)$/);
+        schedule = jQuery('#position-' + matches[1] + '-select-schedule').val();
+        wp_diagram_delete_post(schedule, matches[2], matches[1]);
     });
 
     jQuery('.position-datetime-wrap .save-timestamp').live('click', function(){
