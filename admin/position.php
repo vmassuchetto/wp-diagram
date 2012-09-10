@@ -1,18 +1,10 @@
 <?php
-    $current_schedule = false;
-    $schedule = $wp_diagram->get_schedule( $position['id'] );
-
-    if ( ! empty( $date ) ) {
-        foreach ( $schedule as $s ) {
-            if ( $date == $s->date )
-                $current_schedule = $s;
-        }
-    } else {
-        $date = false;
-    }
     $posts = false;
-    if ( ! empty( $current_schedule->posts ) )
-        $posts = json_decode( $current_schedule->posts );
+    $schedule = $wp_diagram->get_schedule( array( 'position' => $position['id'] ) );
+    if ( empty( $selected_schedule ) && ! empty( $schedule ) && ! empty( $schedule[ key( $schedule ) ] ) )
+        $selected_schedule = $schedule[ key( $schedule ) ]->id;
+    if ( ! empty( $selected_schedule ) && ! empty( $schedule[ $selected_schedule ]->posts ) )
+        $posts = json_decode( $schedule[ $selected_schedule ]->posts );
 ?>
 <div class="postbox" id="position-<?php echo $position['id']; ?>">
 <h3><label for="link_name"><?php echo $position['name']; ?></label></h3>
@@ -31,9 +23,9 @@
         <select id="position-<?php echo $position['id']; ?>-select-schedule"
             class="position-select-schedule"
             name="position-<?php echo $position['id']; ?>-schedule">
-            <?php foreach( $schedule as $s ) : $i++; ?>
-                <option value="<?php echo $s->date; ?>"
-                    <?php echo ( $date == $s->date ) ? 'selected' : ''; ?>>
+            <?php foreach( $schedule as $s ) : ?>
+                <option value="<?php echo $s->id; ?>"
+                    <?php echo ( $selected_schedule == $s->id ) ? ' selected="selected"' : ''; ?>>
                     <?php echo mysql2date('j M Y H:i', $s->date ); ?>
                 </option>
             <?php endforeach; ?>

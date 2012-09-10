@@ -87,14 +87,32 @@ class WP_Diagram {
 
     /* General Functions */
 
-    function get_schedule( $position ) {
-        if (empty ($position) )
-            return false;
-        $position = sanitize_text_field( $position );
+    function get_schedule( $args = false ) {
+        $defaults = array(
+            'position' => false,
+            'schedule' => false
+        );
+        $args = wp_parse_args( $args, $defaults );
 
         global $wpdb;
 
-        $sql = $wpdb->prepare("
+        if ( ! empty( $args['schedule'] ) ) {
+            $where = $wpdb->prepare( "
+                AND ID = '%s'
+            ", $args['schedule'] );
+
+        } elseif ( ! empty( $args['position'] ) ) {
+            $where = $wpdb->prepare( "
+                AND post_type = '%s'
+                AND post_title = '%s'
+                AND post_date > NOW()
+            ", $this->type_schedule, $args['position'] );
+        }
+
+        if ( ! $where )
+            return false;
+
+        $sql = "
             SELECT
                 ID AS id,
                 post_title AS position,
@@ -102,15 +120,15 @@ class WP_Diagram {
                 post_date AS date
             FROM
                 $wpdb->posts
-            WHERE 1=1
-                AND post_type = '%s'
-                AND post_title = '%s'
-                AND post_date > NOW()
+            WHERE 1=1 {$where}
             ORDER BY date ASC
-        ", $this->type_schedule, $position );
-        if ( $schedule = $wpdb->get_results( $sql ) )
-            return $schedule;
-        return false;
+        ";
+        if ( ! $schedule = $wpdb->get_results( $sql, OBJECT_K ) )
+            return false;
+
+        if ( ! empty( $args['schedule'] ) )
+            return $schedule[ key( $schedule ) ];
+        return $schedule;
     }
 
     /* Ajax Actions */
@@ -142,45 +160,133 @@ class WP_Diagram {
             );
         }
         echo json_encode( $response );
-
         exit;
     }
 
-    function add_schedule() {
-        if ( empty( $_POST['date'] ) || empty( $_POST['position'] ) )
-            return 0;
-        $date = sanitize_text_field( $_POST['date'] );
-        $position = sanitize_text_field( $_POST['position'] );
-
-        if ( ! $time = strtotime($date) )
-            return 0;
-
-        $args = array(
-            'post_type' => $this->type_schedule,
-            'post_title' => $position,
-            'post_date' => $date,
-            'post_status' => 'publish',
-            'post_content' => '',
+    function add_schedule( $args = false ) {
+        $defaults = array(
+            'date' => false,
+            'position' => false,
+            'echo' => true
         );
-        echo wp_insert_post( $args );
+        if ( ! empty( $_POST ) )
+            $args = $_POST;
+        $args = wp_parse_args( $args, $defaults );
+        $args['date'] = sanitize_text_field( $args['date'] );
+        $args['position'] = sanitize_text_field( $args['position'] );
+        if ( ! $args['date'] || ! $args['position']
+            || ! $time = strtotime($args['date']) )
+            exit;
+
+        $postargs = array(
+            'post_type' => $this->type_schedule,
+            'post_title' => $args['position'],
+            'post_date' => $args['date'],
+            'post_status' => 'publish',
+            'post_content' => json_encode( array() ),
+        );
+        $post =  wp_insert_post( $postargs );
+        if ( $args['echo'] ) {
+            echo $post;
+            exit;
+        }
+
+        return $post;
+    }
+
+    function delete_schedule( $args = false ) {
+        $defaults = array(
+            'schedule' => false
+        );
+        if ( empty( $args ) )
+            $args = $_POST;
+        $args = wp_parse_args( $args, $defaults );
+        $args['schedule'] = intval( $args['schedule'] );
+        if ( ! $args['schedule']
+            || ! $schedule = $this->get_schedule( array( 'schedule' => $args['schedule'] ) ) )
+            exit;
+
+        if ( wp_delete_post( $schedule->id ) )
+            echo 1;
+        exit;
+    }
+
+    function add_post( $args = false ) {
+        global $wpdb;
+
+        $defaults = array(
+            'post' => false,
+            'schedule' => false,
+        );
+        if ( ! $args )
+            $args = $_POST;
+        $args = wp_parse_args( $args, $defaults );
+        $args['post'] = intval( $args['post'] );
+        $args['schedule'] = intval( $args['schedule'] );
+        if ( ! $args['post'] || ! $args['schedule']
+            || ! $schedule = $this->get_schedule( array( 'schedule' => $args['schedule'] ) ) )
+            exit;
+        $posts = json_decode( $schedule->posts, true );
+        $new_post = array( $args['post'] => array( 'ID' => $args['post'] ) );
+        if ( ! is_array( $posts ) )
+            $posts = array();
+        $posts = $new_post + $posts;
+        $schedule->posts = json_encode( $posts );
+        $sql = $wpdb->prepare("
+            UPDATE {$wpdb->posts}
+            SET post_content = '%s'
+            WHERE ID = '%s'
+        ", $schedule->posts, $schedule->id );
+        if ( $wpdb->query( $sql ) )
+            echo 1;
+        exit;
+    }
+
+    function delete_post( $args = false ) {
+        global $wpdb;
+
+        $defaults = array(
+            'schedule' => false,
+            'post' => false
+        );
+        if ( ! $args )
+            $args = $_POST;
+        $args = wp_parse_args( $args, $defaults );
+        $args['schedule'] = intval( $args['schedule'] );
+        $args['post'] = intval( $args['post'] );
+        if ( ! $args['schedule'] || ! $args['post']
+            || ! $schedule = $this->get_schedule( array( 'schedule' => $args['schedule'] ) ) )
+            exit;
+
+        $posts = json_decode( $schedule->posts, true );
+        unset( $posts[ $args['post'] ] );
+        $posts = json_encode( $posts);
+
+        $sql = $wpdb->prepare("
+            UPDATE {$wpdb->posts}
+            SET post_content = '%s'
+            WHERE ID = '%s'
+        ", $posts, $schedule->id );
+        if ( $wpdb->query( $sql ) )
+            echo 1;
         exit;
     }
 
     function update_position() {
-        if ( empty( $_POST['date'] ) || empty( $_POST['position'] ) )
+        if ( empty( $_POST['position'] ) )
             return 0;
 
-        global $date, $position, $wp_diagram;
+        global $selected_schedule, $position, $wp_diagram;
 
-        $date = sanitize_text_field( $_POST['date'] );
-        $position_id = sanitize_text_field( $_POST['position'] );
+        if ( ! empty( $_POST['schedule'] ) )
+            $selected_schedule = intval( $_POST['schedule'] );
+        else
+            $selected_schedule = false;
+        $position = sanitize_text_field( $_POST['position'] );
 
-        foreach( $wp_diagram->positions as $p ) {
-            if ( $position_id == $p['id'] ) {
-                $position = $p;
-                break;
-            }
-        }
+        if ( $position &&
+            ! empty( $wp_diagram->positions[ $position ] ) )
+            $position = $wp_diagram->positions[ $position ];
 
         include( $this->plugin_dir_path . 'admin/position.php' );
         exit;
@@ -204,7 +310,7 @@ function wp_diagram_register_positions( $positions = array() ) {
     if ( empty( $positions ) || ! is_array( $positions ) )
         $wp_diagram->error_fatal( __( 'No parameter set for position declaration.', 'wp_diagram' ) );
 
-    $used = array();
+    $registered_positions = array();
     $required = array( 'id', 'name' );
 
     foreach( $positions as $position ) {
@@ -216,12 +322,14 @@ function wp_diagram_register_positions( $positions = array() ) {
         if ( preg_match( '/[^A-Za-z0-9_]/', $position['id'] ) )
             $wp_diagram->error_fatal(
                 sprintf( __( 'Please provide position IDs with only characters, numbers and underscores.', 'wp_diagram' ), $r ) );
-        if ( in_array( $position['id'], $used ) )
+        if ( in_array( $position['id'], array_keys( $registered_positions ) ) )
             $wp_diagram->error_fatal(
                 sprintf( __( 'Position IDs are meant to be unique. You\'re providing duplicated ones.', 'wp_diagram' ), $r ) );
+
+        $registered_positions[ $position['id'] ] = $position;
     }
 
     // Valid positions
-    $wp_diagram->positions = $positions;
+    $wp_diagram->positions = $registered_positions;
 
 }

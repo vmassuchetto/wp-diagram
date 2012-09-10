@@ -2,8 +2,19 @@ var values;
 values = {};
 
 function wp_diagram_add_post(post, position) {
+    schedule = jQuery('#position-' + position + '-select-schedule').val();
     jQuery.ajax({
-
+        url: ajaxurl,
+        type: 'POST',
+        data: {
+            action: 'wp_diagram_add_post',
+            post: post,
+            position: position,
+            schedule: schedule
+        },
+        success: function() {
+            wp_diagram_update_position(schedule, position);
+        }
     });
 }
 
@@ -15,6 +26,21 @@ function wp_diagram_add_schedule(date, position) {
             action: 'wp_diagram_add_schedule',
             date: date,
             position: position
+        },
+        success: function(schedule) {
+            if (schedule)
+                wp_diagram_update_position(schedule, position);
+        }
+    });
+}
+
+function wp_diagram_delete_schedule(schedule, position) {
+    jQuery.ajax({
+        url: ajaxurl,
+        type: 'POST',
+        data: {
+            action: 'wp_diagram_delete_schedule',
+            schedule: schedule
         },
         success: function() {
             wp_diagram_update_position(date, position);
@@ -28,7 +54,7 @@ function wp_diagram_update_position(date, position) {
         type: 'POST',
         data: {
             action: 'wp_diagram_update_position',
-            date: date,
+            schedule: schedule,
             position: position
         },
         success: function(data){
@@ -89,8 +115,8 @@ jQuery(document).ready(function(){
 
     jQuery('.position-select-schedule').live('change', function(){
         matches = jQuery(this).attr('id').match(/^position-(.+)-select-schedule$/);
-        date = jQuery(this).val();
-        wp_diagram_update_position(date, matches[1]);
+        schedule = jQuery(this).val();
+        wp_diagram_update_position(schedule, matches[1]);
     });
 
 });
