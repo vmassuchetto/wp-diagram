@@ -68,7 +68,10 @@
                 class="post<?php echo ( $i % 2 ) ? ' alt' : ''; ?> format-standard">
 
             <div class="thumbnail">
-                <?php the_post_thumbnail( array( 64, 64 ) ); ?>
+                <?php
+                    if ( has_post_thumbnail( $p->ID ) )
+                        the_post_thumbnail( array( 64, 64 ) );
+                ?>
             </div>
 
             <div>
