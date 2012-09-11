@@ -1,7 +1,7 @@
 var green = '#D2FFCE';
 var yellow = '#FFE49A';
 var red = '#FF9AA3';
-var grey = '#BBBBBB';
+var grey = '#DDDDDD';
 var values;
 values = {};
 
