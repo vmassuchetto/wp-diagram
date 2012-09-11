@@ -1,14 +1,28 @@
-<li id="post-<?php echo $p->ID; ?>" valign="top"
+<li id="post-<?php the_ID(); ?>" valign="top"
     class="post<?php echo ( $i % 2 ) ? ' alt' : ''; ?> format-standard">
 
 <div class="thumbnail">
-    <?php
-        if ( has_post_thumbnail( $p->ID ) )
-            the_post_thumbnail( array( 64, 64 ) );
-    ?>
+    <?php if ( has_post_thumbnail( get_the_ID() ) ) : ?>
+        <div class="thumbnail-icon">
+            <a
+                id="post-<?php the_ID(); ?>-thumbnail-icon"
+                class="post-thumbnail-icon post-thumbnail-icon-enabled"
+                href="javascript:void(0)"></a>
+        </div>
+        <div class="thumbnail-preview">
+            <?php the_post_thumbnail( array( 150, 150 ) ); ?>
+        </div>
+    <?php else : ?>
+        <div class="thumbnail-icon">
+            <a
+                id="post-<?php the_ID() ?>-thumbnail-icon"
+                class="post-thumbnail-icon post-thumbnail-icon-disabled"
+                href="javascript:void(0)"></a>
+        </div>
+    <?php endif; ?>
 </div>
 
-<div>
+<div class="info">
     <span class="position-post-title"><strong><?php the_title(); ?></strong></span>
     <span class="position-post-excerpt"><?php the_excerpt(); ?></span>
     <div class="row-actions">
@@ -34,6 +48,34 @@
         </span>
     </div>
 </div>
+
+<?php /*
+<div class="info inline-edit-row">
+    <form
+        id="position-<?php echo $position['id']; ?>-post-<?php echo $p->ID; ?>-edit"
+        class="position-post-edit">
+    <fieldset>
+
+    <label>
+        <span class="title"><?php _e( 'Title' ); ?></span>
+		<span class="input-text-wrap">
+            <input type="text" value="" class="ptitle" name="post_title">
+            <small><?php _e( 'Original Title', 'wp_diagram' ); ?>:&nbsp;<?php the_title(); ?></small>
+        </span>
+	</label>
+
+    <label>
+        <span class="title"><?php _e( 'Excerpt' ); ?></span>
+		<span class="input-text-wrap">
+            <input type="text" value="" name="post_name">
+            <small><?php _e( 'Original Excerpt', 'wp_diagram' ); ?>:&nbsp;<?php the_excerpt(); ?></small>
+        </span>
+	</label>
+
+    </fieldset>
+    </form>
+</div>
+*/ ?>
 
 </li>
 

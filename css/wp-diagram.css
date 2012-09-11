@@ -14,11 +14,16 @@
 
 .wp-diagram ul { margin:0; }
 .wp-diagram .misc-pub-section { height:26px; line-height:26px; }
-.wp-diagram .post { min-height:64px; margin:0; padding:0; border-bottom:1px solid #DFDFDF; border-top:1px solid #FFFFFF; padding:9px 7px 11px; vertical-align:top; line-height:1.4em; }
-.wp-diagram .post .thumbnail { float:left; width:64px; height:64px; padding-right:15px; }
+.wp-diagram .post { margin:0; padding:0; border-bottom:1px solid #DFDFDF; border-top:1px solid #FFFFFF; padding:9px 7px 11px; vertical-align:top; line-height:1.4em; }
+.wp-diagram .post .info { padding-left:30px; }
 .wp-diagram .post .trash a { color:#BC0B0B; }
 .wp-diagram .post .trash a:hover { color:#FF0000; }
 .wp-diagram .posts .ui-sortable-helper { border:1px solid #CCCCCC; background-color:#FFFFFF; }
-.wp-diagram .posts .ui-state-highlight { background:#FFE49A; display:block; height:80px; }
+.wp-diagram .posts .ui-state-highlight { background:#FFE49A; display:block; height:60px; }
+.wp-diagram .thumbnail { float:left; }
+.wp-diagram .post-thumbnail-icon { display:block; width:16px; height:16px; overflow:hidden; background-repeat:no-repeat; }
+.wp-diagram .post-thumbnail-icon-enabled { background-position:0 -24px; }
+.wp-diagram .post-thumbnail-icon-disabled { background-position:0 0; }
+.wp-diagram .thumbnail-preview { display:none; }
 
 
