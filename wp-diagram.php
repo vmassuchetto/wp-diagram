@@ -32,6 +32,7 @@ class WP_Diagram {
         if ( is_admin() ) {
             add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
             add_action( 'admin_menu', array( $this, 'admin_menu' ) );
+            add_action( 'admin_head', array( $this, 'admin_head' ) );
 
             $ajax_actions = array( 'post_search', 'add_schedule', 'delete_schedule',
                 'add_post', 'delete_post', 'change_order', 'update_position' );
@@ -44,8 +45,13 @@ class WP_Diagram {
     /* Plugin Structure */
 
     function error_fatal( $error_message ) {
-        $error = new WP_Error( 'wp_diagram', 'wp_diagram: ' . $error_message );
+        $error = new WP_Error( 'wp_diagram', 'wp_diagram fatal error: ' . $error_message );
         wp_die( $error );
+    }
+
+    function error_warning( $error_message ) {
+        $error = new WP_Error( 'wp_diagram', 'wp_diagram warning: ' . $error_message );
+        print_r($error);
     }
 
     function register_structure() {
@@ -87,7 +93,17 @@ class WP_Diagram {
 
     function admin_menu() {
         add_menu_page( __( 'Positioning', 'wp_diagram' ), __( 'Positioning', 'wp_diagram' ),
-            'add_users', 'wp_diagram', array( $this, 'admin_post_positions' ), false, 6 );
+            'add_users', 'wp_diagram', array( $this, 'admin_post_positions' ),
+            $this->plugin_dir_url . 'img/blogs-stack.png'
+            , 6 );
+    }
+
+    function admin_head() {
+        ?>
+        <style type="text/css" media="screen">
+            .wp-diagram .post-thumbnail-icon { background-image:url('<?php echo $this->plugin_dir_url; ?>img/image.png'); }
+        </style>
+        <?php
     }
 
     function admin_post_positions() {
@@ -384,15 +400,49 @@ class WP_Diagram {
 function wp_diagram_init() {
     global $wp_diagram;
     $wp_diagram = new WP_Diagram();
+    do_action( 'wp_diagram_init' );
 }
 add_action( 'plugins_loaded', 'wp_diagram_init' );
 
-function wp_diagram_register_positions( $positions = array() ) {
+function wp_diagram_check_instance() {
     global $wp_diagram;
+
+    $cache_key = 'wp_diagram_check_instance';
+    if ( wp_cache_get( $cache_key ) )
+        return true;
 
     if ( ! class_exists( 'WP_Diagram' )
         || 'WP_Diagram' !== get_class( $wp_diagram ) )
         WP_Diagram::error_fatal( __( 'Plugin instantiation error.', 'wp_diagram' ) );
+
+    wp_cache_set( $cache_key, true );
+    return true;
+}
+
+function wp_diagram_check_position( $position ) {
+    global $wp_diagram;
+
+    $cache_key = 'wp_diagram_check_position_' . $position;
+    if ( wp_cache_get( $cache_key ) )
+        return true;
+
+    wp_diagram_check_instance();
+
+    if ( ! in_array( $position, array_keys( $wp_diagram->positions ) ) ) {
+        $wp_diagram->error_warning( sprintf( __( 'Position "%s" not declared in your theme.', 'wp_diagram' ), $position ) );
+        return false;
+    }
+
+    wp_cache_set( $cache_key, true );
+    return true;
+}
+
+/* API Functions */
+
+function wp_diagram_register_positions( $positions = array() ) {
+    global $wp_diagram;
+
+    wp_diagram_check_instance();
 
     if ( empty( $positions ) || ! is_array( $positions ) )
         $wp_diagram->error_fatal( __( 'No parameter set for position declaration.', 'wp_diagram' ) );
@@ -424,5 +474,50 @@ function wp_diagram_register_positions( $positions = array() ) {
 function wp_diagram_get_posts( $position ) {
     global $wp_diagram;
 
+    if ( ! wp_diagram_check_position( $position ) )
+        return false;
 
+    $cache_key = 'wp_diagram_current_posts_' . $position;
+    if ( $posts = wp_cache_get( $cache_key ) )
+        return $posts;
+
+    if ( ! $schedule = $wp_diagram->get_current_schedule( array( 'position' => $position ) ) ) {
+        wp_cache_set( $cache_key, false );
+        return false;
+    }
+
+    $scheduled_posts = json_decode( $schedule->posts );
+    if ( empty( $scheduled_posts ) || is_array( $scheduled_posts) || count( $scheduled_posts ) < 1 ) {
+        wp_cache_set( $cache_key, false );
+        return false;
+    }
+
+    $posts = array();
+    foreach ( $scheduled_posts as $p ) {
+        $posts[] = get_post( $p->ID );
+    }
+
+    wp_cache_set( $cache_key, $posts );
+    return $posts;
+}
+
+function wp_diagram_get_query( $position ) {
+    if ( ! $posts = wp_diagram_get_posts( $position ) )
+        return false;
+
+    $query = new WP_Query();
+    $query->current_post = -1;
+    $query->post_count = count( $posts );
+    $query->posts = $posts;
+
+    return $query;
+}
+
+function wp_diagram_query( $position ) {
+    global $wp_query;
+
+    if ( ! $query = wp_diagram_get_query( $position ) )
+        return false;
+
+    $wp_query = $query;
 }
