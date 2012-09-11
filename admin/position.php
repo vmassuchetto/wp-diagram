@@ -68,6 +68,7 @@
                 $i++;
                 if ( ! $post = get_post( $p->ID ) )
                     continue;
+                setup_postdata( $post );
                 include( $this->plugin_dir_path . 'admin/post.php' );
             }
         ?>
