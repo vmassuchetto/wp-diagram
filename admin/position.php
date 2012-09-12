@@ -1,9 +1,12 @@
 <?php
     $posts = false;
     $schedule = $wp_diagram->get_schedule( array( 'position' => $position['id'] ) );
-    if ( empty( $selected_schedule ) && ! empty( $schedule ) && ! empty( $schedule[ key( $schedule ) ] ) )
-        $selected_schedule = $schedule[ key( $schedule ) ]->id;
-    if ( ! empty( $selected_schedule ) && ! empty( $schedule[ $selected_schedule ]->posts ) )
+    $first = ( ! empty( $schedule[ key( $schedule ) ]->id ) ) ? $schedule[ key( $schedule ) ]->id : false;
+
+    if ( empty( $selected_schedule ) && $first )
+        $selected_schedule = $first;
+
+    if ( $selected_schedule && ! empty( $schedule[ $selected_schedule ]->posts ) )
         $posts = json_decode( $schedule[ $selected_schedule ]->posts );
 ?>
 <div id="position-<?php echo $position['id']; ?>" class="postbox position">
@@ -76,3 +79,5 @@
 <?php endif; ?>
 </div><!-- .postbox -->
 <script type="text/javascript">wp_diagram_position_triggers('<?php echo $position['id']; ?>');</script>
+</div><!-- .position -->
+<?php unset( $selected_schedule ); ?>
