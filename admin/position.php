@@ -41,10 +41,14 @@
         class="button position-add-schedule">
         <?php _e( 'Add New Scheduling', 'wp_diagram'); ?></a>
 
-    <a id="position-<?php echo $position['id']; ?>-delete-schedule"
-        class="deletion position-delete-schedule"
-        href="javascript:void(0);">
-        <?php _e( 'Delete This Scheduling', 'wp_diagram'); ?></a>
+    <?php if ( $schedule ) : ?>
+
+        <a id="position-<?php echo $position['id']; ?>-delete-schedule"
+            class="deletion position-delete-schedule"
+            href="javascript:void(0);">
+            <?php _e( 'Delete This Scheduling', 'wp_diagram'); ?></a>
+
+    <?php endif; ?>
 
     <div id="position-<?php echo $position['id']; ?>-datetime-wrap"
         class="position-datetime-wrap">
