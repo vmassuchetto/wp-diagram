@@ -126,7 +126,8 @@ class WP_Diagram {
         global $wpdb;
 
         $defaults = array(
-            'position' => false
+            'position' => false,
+            'raw' => false
         );
         $args = wp_parse_args( $args, $defaults );
         if ( ! $args['position'] )
@@ -169,7 +170,7 @@ class WP_Diagram {
         $args = wp_parse_args( $args, $defaults );
 
         $schedules = array();
-        if ( $s = $this->get_current_schedule( $args ) )
+        if ( $s = $this->get_current_schedule( $args + array( 'raw' => true ) ) )
             $schedules[ $s->id ] = $s;
 
         $select = $this->get_schedule_sql_select();
@@ -598,7 +599,13 @@ function wp_diagram_get_posts( $position ) {
         return false;
     }
 
-    wp_cache_set( $cache_key, $schedule->posts );
+    $i = 0;
+    $posts = array();
+    foreach ( $schedule->posts as $p ) {
+        $posts[ $i++ ] = $p;
+    }
+
+    wp_cache_set( $cache_key, $posts );
     return $posts;
 }
 
