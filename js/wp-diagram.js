@@ -134,7 +134,7 @@ function wp_diagram_position_triggers(position) {
 function wp_diagram_position_autocomplete(position) {
     var e = jQuery('#position-' + position + '-add-post');
     var ac = jQuery(e).autocomplete({
-        source: ajaxurl + '?action=wp_diagram_post_search',
+        source: ajaxurl + '?action=wp_diagram_search_post',
         select: function(e, ui){
             position = jQuery(this).attr('name').match(/^position-(.+)-add-post$/);
             position_id = position[1];

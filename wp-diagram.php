@@ -34,8 +34,8 @@ class WP_Diagram {
             add_action( 'admin_menu', array( $this, 'admin_menu' ) );
             add_action( 'admin_head', array( $this, 'admin_head' ) );
 
-            $ajax_actions = array( 'add_schedule', 'delete_schedule',
-                'post_search', 'add_post', 'delete_post', 'save_post',
+            $ajax_actions = array( 'add_schedule', 'copy_schedule', 'delete_schedule',
+                'search_post', 'add_post', 'delete_post', 'save_post',
                 'change_order', 'update_position' );
             foreach( $ajax_actions as $a )
                 add_action( 'wp_ajax_wp_diagram_' . $a, array( $this, $a ) );
