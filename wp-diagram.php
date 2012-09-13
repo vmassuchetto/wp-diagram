@@ -237,7 +237,7 @@ class WP_Diagram {
 
     /* Ajax Actions */
 
-    function post_search() {
+    function search_post() {
         if ( empty( $_GET['term'] ) )
             return 0;
         $query = sanitize_text_field( $_GET['term'] );
@@ -280,7 +280,7 @@ class WP_Diagram {
         $args['date'] = sanitize_text_field( $args['date'] );
         $args['position'] = sanitize_text_field( $args['position'] );
         if ( ! $args['date'] || ! $args['position']
-            || ! $time = strtotime($args['date']) )
+            || ! $time = strtotime( $args['date'] ) )
             exit;
 
         $postargs = array(
@@ -288,7 +288,41 @@ class WP_Diagram {
             'post_title' => $args['position'],
             'post_date' => $args['date'],
             'post_status' => 'publish',
-            'post_content' => json_encode( array() ),
+            'post_content' => json_encode( array() )
+        );
+        $post =  wp_insert_post( $postargs );
+        if ( $args['echo'] ) {
+            echo $post;
+            exit;
+        }
+
+        return $post;
+    }
+
+    function copy_schedule( $args = false ) {
+        $defaults = array(
+            'date' => false,
+            'schedule' => false,
+            'position' => false,
+            'echo' => true
+        );
+        if ( ! empty( $_POST ) )
+            $args = $_POST;
+        $args = wp_parse_args( $args, $defaults );
+        $args['date'] = sanitize_text_field( $args['date'] );
+        $args['schedule'] = intval( $args['schedule'] );
+        $args['position'] = sanitize_text_field( $args['position'] );
+        $schedule = $this->get_schedule( array( 'schedule' => $args['schedule'], 'raw' => true ) );
+        if ( ! $args['date'] || ! $args['position'] || ! $schedule
+            || ! $time = strtotime( $args['date']) )
+            exit;
+
+        $postargs = array(
+            'post_type' => $this->type_schedule,
+            'post_title' => $args['position'],
+            'post_date' => $args['date'],
+            'post_status' => 'publish',
+            'post_content' => $schedule->posts
         );
         $post =  wp_insert_post( $postargs );
         if ( $args['echo'] ) {
