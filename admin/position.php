@@ -40,6 +40,12 @@
     <a id="position-<?php echo $position['id']; ?>-add-schedule"
         class="button position-add-schedule">
         <?php _e( 'Add New Scheduling', 'wp_diagram'); ?></a>
+
+    <a id="position-<?php echo $position['id']; ?>-delete-schedule"
+        class="deletion position-delete-schedule"
+        href="javascript:void(0);">
+        <?php _e( 'Delete This Scheduling', 'wp_diagram'); ?></a>
+
     <div id="position-<?php echo $position['id']; ?>-datetime-wrap"
         class="position-datetime-wrap">
     <div id="position-<?php echo $position['id']; ?>-datetime"
@@ -53,13 +59,17 @@
             );
             touch_time(true, true);
         ?>
+
+        <?php if ( $schedule ) : ?>
+
+            <a id="position-<?php echo $position['id']; ?>-copy-schedule"
+                class="position-copy-schedule button-secondary">
+                <?php _e( 'Create Copying Current Posts', 'wp_diagram' ); ?></a>
+
+        <?php endif; ?>
+
     </div><!-- .position-datetime -->
     </div><!-- .position-datetime-wrap -->
-
-    <a id="position-<?php echo $position['id']; ?>-delete-schedule"
-        class="deletion position-delete-schedule"
-        href="javascript:void(0);">
-        <?php _e( 'Delete This Scheduling', 'wp_diagram'); ?></a>
 
 </div><!-- .misc-pub-section -->
 
