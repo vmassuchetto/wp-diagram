@@ -2,7 +2,7 @@
     class="post<?php echo ( $i % 2 ) ? ' alt' : ''; ?> format-standard">
 
 <div class="thumbnail">
-    <?php if ( has_post_thumbnail( get_the_ID() ) ) : ?>
+    <?php if ( strlen( $img = get_the_post_thumbnail( get_the_ID(), array( 150, 150 ) ) ) ) : ?>
         <div class="thumbnail-icon">
             <a
                 id="post-<?php the_ID(); ?>-thumbnail-icon"
@@ -10,7 +10,7 @@
                 href="javascript:void(0)"></a>
         </div>
         <div class="thumbnail-preview">
-            <?php the_post_thumbnail( array( 150, 150 ) ); ?>
+            <?php echo $img; ?>
         </div>
     <?php else : ?>
         <div class="thumbnail-icon">
