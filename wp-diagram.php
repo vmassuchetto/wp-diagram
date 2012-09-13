@@ -56,6 +56,7 @@ class WP_Diagram {
     }
 
     function register_structure() {
+        add_theme_support( 'post-thumbnails' );
         register_post_type( $this->type_schedule, array(
             'public' => false,
             'publicly_queryable' => false,
