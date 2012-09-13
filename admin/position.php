@@ -6,8 +6,8 @@
     if ( empty( $selected_schedule ) && $first )
         $selected_schedule = $first;
 
-    if ( $selected_schedule && ! empty( $schedule[ $selected_schedule ]->posts ) )
-        $posts = json_decode( $schedule[ $selected_schedule ]->posts );
+    if ( ! empty( $selected_schedule ) && ! empty( $schedule[ $selected_schedule ]->posts ) )
+        $posts = $schedule[ $selected_schedule ]->posts;
 ?>
 <div id="position-<?php echo $position['id']; ?>" class="postbox position">
 <h3><label for="link_name"><?php echo $position['name']; ?></label></h3>
