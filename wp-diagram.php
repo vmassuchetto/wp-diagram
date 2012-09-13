@@ -51,8 +51,7 @@ class WP_Diagram {
     }
 
     function error_warning( $error_message ) {
-        $error = new WP_Error( 'wp_diagram', 'wp_diagram warning: ' . $error_message );
-        print_r($error);
+        echo 'wp_diagram warning: ' . $error_message;
     }
 
     function register_structure() {
