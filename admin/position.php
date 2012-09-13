@@ -54,12 +54,13 @@
         class="position-datetime-wrap">
     <div id="position-<?php echo $position['id']; ?>-datetime"
         class="position-datetime">
+        <?php _e( 'Schedule a post position for', 'wp_diagram' ); ?>:&nbsp;
         <?php
             global $post;
             $post = (object) array(
                 'post_status' => 'publish',
-                'post_date' => date( 'Y-m-d H:i:s' ),
-                'post_date_gmt' => date( 'Y-m-d H:i:s' )
+                'post_date' => date_i18n( 'Y-m-d H:i:s' ),
+                'post_date_gmt' => date_i18n( 'Y-m-d H:i:s' )
             );
             touch_time(true, true);
         ?>

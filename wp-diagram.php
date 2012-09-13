@@ -140,13 +140,19 @@ class WP_Diagram {
             WHERE 1=1
                 AND post_type = '%s'
                 AND post_title = '%s'
-                AND post_date < 'NOW()'
+                AND post_date < '%s'
             ORDER BY date ASC
             LIMIT 1
-        ", $this->type_schedule, $args['position'] );
+        ", $this->type_schedule, $args['position'], date_i18n( 'Y-m-d H:i:s' ) );
         $schedule = $wpdb->get_results( $sql );
 
-        if ( ! empty( $schedule[0] ) ) {
+        if ( ! $args['raw'] ) {
+            foreach ( array_keys( $schedule ) as $k ) {
+                $schedule[ $k ] = $this->process_schedule( $schedule[ $k ] );
+            }
+        }
+
+        if ( ! empty( $schedule[0] ) && $schedule[0]->date < date_i18n( 'Y-m-d H:i:s' ) ) {
             $schedule[0]->current = true;
             return $schedule[0];
         }
@@ -179,8 +185,8 @@ class WP_Diagram {
             $where = $wpdb->prepare( "
                 AND post_type = '%s'
                 AND post_title = '%s'
-                AND post_date > NOW()
-            ", $this->type_schedule, $args['position'] );
+                AND post_date > '%s'
+            ", $this->type_schedule, $args['position'], date_i18n( 'Y-m-d H:i:s' ) );
             $limit = '';
         }
 
