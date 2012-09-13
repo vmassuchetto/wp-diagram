@@ -156,7 +156,8 @@ class WP_Diagram {
 
         $defaults = array(
             'position' => false,
-            'schedule' => false
+            'schedule' => false,
+            'raw' => false
         );
         $args = wp_parse_args( $args, $defaults );
 
@@ -194,9 +195,43 @@ class WP_Diagram {
         if ( $schedule = $wpdb->get_results( $sql, OBJECT_K ) )
             $schedules = $schedules + $schedule;
 
+        if ( ! $args['raw'] ) {
+            foreach ( array_keys( $schedules ) as $k ) {
+                $schedules[ $k ] = $this->process_schedule( $schedules[ $k ] );
+            }
+        }
+
         if ( ! empty( $args['schedule'] ) )
             return $schedules[ key( $schedules ) ];
         return $schedules;
+    }
+
+    function process_schedule( $schedule ) {
+        if ( empty( $schedule ) || empty( $schedule->posts ) )
+            return false;
+
+        $schedule_posts = json_decode( $schedule->posts );
+        $posts = array();
+        foreach ( $schedule_posts as $p ) {
+
+            if (! $post = get_post( $p->ID ) )
+                continue;
+
+            if ( ! empty( $p->post_title ) ) {
+                $post->original_post_title = $post->post_title;
+                $post->post_title = $p->post_title;
+            }
+
+            if ( ! empty( $p->post_excerpt ) ) {
+                $post->original_post_excerpt = $post->post_excerpt;
+                $post->post_excerpt = $p->post_excerpt;
+            }
+
+            $posts[ $p->ID ] = $post;
+        }
+
+        $schedule->posts = $posts;
+        return $schedule;
     }
 
     /* Ajax Actions */
@@ -272,7 +307,7 @@ class WP_Diagram {
         $args = wp_parse_args( $args, $defaults );
         $args['schedule'] = intval( $args['schedule'] );
         if ( ! $args['schedule']
-            || ! $schedule = $this->get_schedule( array( 'schedule' => $args['schedule'] ) ) )
+            || ! $schedule = $this->get_schedule( array( 'schedule' => $args['schedule'], 'raw' => true ) ) )
             exit;
 
         if ( wp_delete_post( $schedule->id ) )
@@ -293,7 +328,7 @@ class WP_Diagram {
         $args['post'] = intval( $args['post'] );
         $args['schedule'] = intval( $args['schedule'] );
         if ( ! $args['post'] || ! $args['schedule']
-            || ! $schedule = $this->get_schedule( array( 'schedule' => $args['schedule'] ) ) )
+            || ! $schedule = $this->get_schedule( array( 'schedule' => $args['schedule'], 'raw' => true ) ) )
             exit;
         $posts = json_decode( $schedule->posts, true );
         $new_post = array( $args['post'] => array( 'ID' => $args['post'] ) );
@@ -324,7 +359,7 @@ class WP_Diagram {
         $args['schedule'] = intval( $args['schedule'] );
         $args['post'] = intval( $args['post'] );
         if ( ! $args['schedule'] || ! $args['post']
-            || ! $schedule = $this->get_schedule( array( 'schedule' => $args['schedule'] ) ) )
+            || ! $schedule = $this->get_schedule( array( 'schedule' => $args['schedule'], 'raw' => true ) ) )
             exit;
 
         $posts = json_decode( $schedule->posts, true );
@@ -354,7 +389,7 @@ class WP_Diagram {
         $args['schedule'] = intval( $args['schedule'] );
         $args['order'] = array_filter( explode( ',', $args['order'] ), 'ctype_digit');
         if ( ! $args['schedule'] || ! $args['order']
-            || ! $schedule = $this->get_schedule( array( 'schedule' => $args['schedule'] ) ) )
+            || ! $schedule = $this->get_schedule( array( 'schedule' => $args['schedule'], 'raw' => true ) ) )
             exit;
 
         $posts = json_decode( $schedule->posts, true );
@@ -486,18 +521,7 @@ function wp_diagram_get_posts( $position ) {
         return false;
     }
 
-    $scheduled_posts = json_decode( $schedule->posts );
-    if ( empty( $scheduled_posts ) || is_array( $scheduled_posts) || count( $scheduled_posts ) < 1 ) {
-        wp_cache_set( $cache_key, false );
-        return false;
-    }
-
-    $posts = array();
-    foreach ( $scheduled_posts as $p ) {
-        $posts[] = get_post( $p->ID );
-    }
-
-    wp_cache_set( $cache_key, $posts );
+    wp_cache_set( $cache_key, $schedule->posts );
     return $posts;
 }
 

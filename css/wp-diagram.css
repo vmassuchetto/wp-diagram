@@ -6,15 +6,15 @@
 .ui-timepicker-div td { font-size: 90%; }
 .ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
 
-.position-datetime-wrap { display:inline-block; }
+.wp-diagram .misc-pub-section { line-height:26px; }
+.position-datetime-wrap { display:block; clear:both; margin:5px 0 0 0; }
 .position-datetime { display:none; }
 .position-datetime-wrap .timestamp-wrap,
 .position-datetime-wrap p { position:relative; display:inline-block; margin:0; }
 .position-datetime-wrap .cancel-timestamp { display:none; }
 
 .wp-diagram ul { margin:0; }
-.wp-diagram .misc-pub-section { height:26px; line-height:26px; }
-.wp-diagram .post { margin:0; padding:0; border-bottom:1px solid #DFDFDF; border-top:1px solid #FFFFFF; padding:9px 7px 11px; vertical-align:top; line-height:1.4em; }
+.wp-diagram .post { position:relative; margin:0; padding:0; border-bottom:1px solid #DFDFDF; border-top:1px solid #FFFFFF; padding:9px 7px 11px; vertical-align:top; line-height:1.4em; }
 .wp-diagram .post .info { padding-left:30px; }
 .wp-diagram .post .trash a { color:#BC0B0B; }
 .wp-diagram .post .trash a:hover { color:#FF0000; }

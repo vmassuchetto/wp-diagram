@@ -77,10 +77,7 @@
     <ul class="posts">
         <?php
             $i = 0;
-            foreach( $posts as $p ) {
-                $i++;
-                if ( ! $post = get_post( $p->ID ) )
-                    continue;
+            foreach( $posts as $post ) {
                 setup_postdata( $post );
                 include( $this->plugin_dir_path . 'admin/post.php' );
             }
