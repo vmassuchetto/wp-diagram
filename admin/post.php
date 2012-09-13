@@ -21,8 +21,7 @@
         </div>
     <?php endif; ?>
 </div>
-
-<div class="info">
+<div class="info post-info">
     <span class="position-post-title"><strong><?php the_title(); ?></strong></span>
     <span class="position-post-excerpt"><?php the_excerpt(); ?></span>
     <div class="row-actions">
@@ -49,33 +48,50 @@
     </div>
 </div>
 
-<?php /*
 <div class="info inline-edit-row">
     <form
-        id="position-<?php echo $position['id']; ?>-post-<?php echo $p->ID; ?>-edit"
+        id="position-<?php echo $position['id']; ?>-post-<?php the_ID(); ?>-edit"
         class="position-post-edit">
     <fieldset>
 
     <label>
         <span class="title"><?php _e( 'Title' ); ?></span>
-		<span class="input-text-wrap">
-            <input type="text" value="" class="ptitle" name="post_title">
-            <small><?php _e( 'Original Title', 'wp_diagram' ); ?>:&nbsp;<?php the_title(); ?></small>
+        <span class="input-text-wrap">
+            <input type="text" value="<?php echo $post->post_title; ?>" class="ptitle" name="post_title">
+            <?php if ( ! empty( $post->original_post_title ) ) : ?>
+                <small><?php _e( 'Original Title', 'wp_diagram' ); ?>:&nbsp;<?php echo apply_filters( 'the_title', $post->original_post_title ); ?></small>
+            <?php endif; ?>
         </span>
-	</label>
+    </label>
 
     <label>
         <span class="title"><?php _e( 'Excerpt' ); ?></span>
-		<span class="input-text-wrap">
-            <input type="text" value="" name="post_name">
-            <small><?php _e( 'Original Excerpt', 'wp_diagram' ); ?>:&nbsp;<?php the_excerpt(); ?></small>
+        <span class="input-text-wrap">
+            <textarea name="post_excerpt"><?php echo $post->post_excerpt; ?></textarea>
+            <?php if ( ! empty( $post->original_post_excerpt ) ) : ?>
+                <small><?php _e( 'Original Excerpt', 'wp_diagram' ); ?>:&nbsp;<?php echo apply_filters( 'the_excerpt', $post->original_post_excerpt ); ?></small>
+            <?php endif; ?>
         </span>
-	</label>
+    </label>
+
+    <input type="hidden" name="schedule" value="<?php echo $selected_schedule; ?>" />
+    <input type="hidden" name="post_id" value="<?php the_ID(); ?>" />
+    <input type="hidden" name="action" value="wp_diagram_save_post" />
+
+    <p class="submit inline-edit-save">
+        <a class="button-secondary position-post-edit-cancel"
+            title="<?php _e( 'Cancel' ); ?>"
+            href="javascript:void(0);"><?php _e( 'Cancel' ); ?></a>
+
+        <a
+            id="position-<?php echo $position['id']; ?>-post-<?php the_ID(); ?>-edit-save"
+            class="button-primary save alignright position-post-edit-save"
+            title="<?php _e( 'Update' ); ?>"
+            href="javascript:void(0);"><?php _e( 'Update' ); ?></a>
+    </p>
 
     </fieldset>
     </form>
 </div>
-*/ ?>
 
 </li>
-

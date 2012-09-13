@@ -22,8 +22,13 @@
 .wp-diagram .posts .ui-state-highlight { background:#FFE49A; display:block; height:60px; }
 .wp-diagram .thumbnail { float:left; }
 .wp-diagram .post-thumbnail-icon { display:block; width:16px; height:16px; overflow:hidden; background-repeat:no-repeat; }
-.wp-diagram .post-thumbnail-icon-enabled { background-position:0 -24px; }
-.wp-diagram .post-thumbnail-icon-disabled { background-position:0 0; }
-.wp-diagram .thumbnail-preview { display:none; }
+.wp-diagram .post-thumbnail-icon-enabled { background-position:0 0; }
+.wp-diagram .post-thumbnail-icon-disabled { background-position:0 -24px; }
+.wp-diagram .thumbnail-preview { position:absolute; z-index:2; left:-55px; top:-55px; background:#F5F5F5; padding:5px; border:1px solid #DFDFDF; border-radius:3px; box-shadow:0 0 5px #CCCCCC; display:none; }
+.wp-diagram .position-post-excerpt { display:block; clear:both; font-size:11px; }
+.wp-diagram .position-post-excerpt p { padding:0; margin:3px 0; }
+
+.wp-diagram .inline-edit-row { display:none; }
+.wp-diagram .inline-edit-row fieldset { float:none !important; }
 
 

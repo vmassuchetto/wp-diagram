@@ -34,8 +34,9 @@ class WP_Diagram {
             add_action( 'admin_menu', array( $this, 'admin_menu' ) );
             add_action( 'admin_head', array( $this, 'admin_head' ) );
 
-            $ajax_actions = array( 'post_search', 'add_schedule', 'delete_schedule',
-                'add_post', 'delete_post', 'change_order', 'update_position' );
+            $ajax_actions = array( 'add_schedule', 'delete_schedule',
+                'post_search', 'add_post', 'delete_post', 'save_post',
+                'change_order', 'update_position' );
             foreach( $ajax_actions as $a )
                 add_action( 'wp_ajax_wp_diagram_' . $a, array( $this, $a ) );
         }
@@ -371,6 +372,42 @@ class WP_Diagram {
             SET post_content = '%s'
             WHERE ID = '%s'
         ", $posts, $schedule->id );
+        if ( $wpdb->query( $sql ) )
+            echo 1;
+        exit;
+    }
+
+    function save_post( $args = false ) {
+        global $wpdb;
+
+        $defaults = array(
+            'schedule' => false,
+            'post_id' => false,
+            'post_title' => false,
+            'post_excerpt' => false
+        );
+        if ( ! $args )
+            $args = $_POST;
+        $args = wp_parse_args( $args, $defaults );
+        $args['schedule'] = intval( $args['schedule'] );
+        $args['post_id'] = intval( $args['post_id'] );
+        $args['post_title'] = sanitize_text_field( $args['post_title'] );
+        $args['post_excerpt'] = sanitize_text_field( $args['post_excerpt'] );
+
+        if ( ! $args['post_id'] )
+            exit;
+
+        $schedule = $this->get_schedule( array( 'schedule' => $args['schedule'], 'raw' => true ) );
+        $posts = json_decode( $schedule->posts );
+        $posts->{$args['post_id']}->post_title = $args['post_title'];
+        $posts->{$args['post_id']}->post_excerpt = $args['post_excerpt'];
+        $posts = json_encode( $posts );
+
+        $sql = $wpdb->prepare( "
+            UPDATE {$wpdb->posts}
+            SET post_content = '%s'
+            WHERE ID = '%s'
+        ", $posts, $args['schedule'] );
         if ( $wpdb->query( $sql ) )
             echo 1;
         exit;

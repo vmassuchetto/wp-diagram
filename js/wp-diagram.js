@@ -190,10 +190,50 @@ jQuery(document).ready(function(){
         wrap.find('.position-datetime').fadeOut(100);
     });
 
-    jQuery('.position-select-schedule').live('change', function(){
-        matches = jQuery(this).attr('id').match(/^position-(.+)-select-schedule$/);
-        schedule = jQuery(this).val();
-        wp_diagram_update_position(schedule, matches[1]);
+    jQuery('.position-add-post').each(function(){
+        matches = jQuery(this).attr('id').match(/^position-(.*)-add-post$/);
+        wp_diagram_position_autocomplete(matches[1]);
+    });
+
+    jQuery('.position-delete-post').live('click', function(){
+        matches = jQuery(this).attr('id').match(/^position-(.+)-delete-post-(.+)$/);
+        schedule = jQuery('#position-' + matches[1] + '-select-schedule').val();
+        wp_diagram_delete_post(schedule, matches[2], matches[1]);
+    });
+
+    jQuery('.post-thumbnail-icon-enabled').live('mouseover', function(){
+        preview = jQuery(this).parent().parent().find('.thumbnail-preview');
+        preview.fadeIn(200);
+    });
+
+    jQuery('.position-edit-post').live('click', function(){
+        post = jQuery(this).parents('.post');
+        post.find('.post-info').fadeOut(200);
+        post.find('.inline-edit-row').delay(200).fadeIn(200);
+    });
+
+    jQuery('.position-post-edit-cancel').live('click', function(){
+        post = jQuery(this).parents('.post');
+        post.find('.inline-edit-row').fadeOut(200);
+        post.find('.post-info').delay(200).fadeIn(200);
+    });
+
+    jQuery('.position-post-edit-save').live('click', function(){
+        matches = jQuery(this).attr('id').match(/position-(.+)-post-(.+)-edit-save/);
+        form = jQuery('#position-' + matches[1] + '-post-' + matches[2] + '-edit');
+        schedule = jQuery('#position-' + matches[1] + '-select-schedule').val();
+        jQuery.ajax({
+            url: ajaxurl,
+            type: 'POST',
+            data: form.serialize(),
+            success: function(){
+                wp_diagram_update_position(schedule, matches[1], green);
+            }
+        });
+    });
+
+    jQuery('.thumbnail-preview').live('mouseout', function(){
+        jQuery(this).fadeOut(200);
     });
 
 });
