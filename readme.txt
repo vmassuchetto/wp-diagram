@@ -64,7 +64,7 @@ Register the positions in your `functions.php`:
 ) );
 
 Go to the `Positioning` menu in the admin interface and schedule the posts.
-1. Click in `Add New Schedulling` and select a date. The posts you will schedule will be displayed only from this date and on.
+1. Click in `Add New Scheduling` and select a date. The posts you will schedule will be displayed only from this date and on.
 2. Search the posts you want to add to this scheduling.
 3. If desired, change the order by dragging and dropping the posts. You can also change the post title and excerpt for this scheduling.
 
