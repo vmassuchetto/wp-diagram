@@ -64,6 +64,9 @@ Register the positions in your `functions.php`:
 ) );
 
 Go to the `Positioning` menu in the admin interface and schedule the posts.
+1. Click in `Add New Schedulling` and select a date. The posts you will schedule will be displayed only from this date and on.
+2. Search the posts you want to add to this schedulling.
+3. If desired, change the order by dragging and dropping the posts. You can also change the post title and excerpt for this schedulling.
 
 Then, in your templates just use `wp_diagram_get_query( 'position_id' )` to call the scheduled posts:
 
@@ -78,39 +81,10 @@ Then, in your templates just use `wp_diagram_get_query( 'position_id' )` to call
 
 == Screenshots ==
 
-1. This is the original image.
-2. Resizing to 300x300px: `get_post_image ('w=300&h=300');`
-3. Adjusting brightness: `get_post_image ('w=200&zc=1&fltr[]=brit|20');`
-4. Flip vertically: `get_post_image ('w=200&zc=1&fltr[]=flip|y');`
-5. Text: `get_post_image ('w=200&zc=1&fltr[]=wmt|I\\''m a Camel! &#169;|16|C|FFFFFF|/path/to/liberation-sans.ttf|100|10|0|000000|80|x');`
-6. Watermak image: `get_post_image ('w=200&zc=1&fltr[]=wmi|/path/to/camel-logo.png|T|50|5|5|320');`
-7. Applying mask: `get_post_image ('w=200&zc=1&fltr[]=mask|/path/to/camel-abstract.png&f=png');`
-8. Mask applyed
+1. Admin interface.
 
 == Changelog ==
 
-= 0.05 =
-
-* Removing get_the_image dependency
-* Converting images on the server side
-* Adding the security password
-* Improving the calling method
-
-= 0.04 =
-
-* phpThumb update to fix security issues;
-* Displaying nice error messages instead of breaking execution.
-
-= 0.03 =
-
-* Minor changes to make it work properly on Windows servers.
-
-= 0.02 =
-
-* Changed the way of calling the plugin, now it's done via an array of options. See the documentation for more info;
-* Now it works with multisite. There's no absolute way of make it work. Some servers and websites will need a different parse to get the images path;
-* There's a verification to check if "get-the-image" is also installed.
-
 = 0.01 =
 
-* Plugin released. Don't expect multisite to work.
+* Plugin released.
