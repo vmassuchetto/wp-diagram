@@ -2,7 +2,7 @@
 
 Contributors: viniciusmassuchetto
 Donate link: http://vinicius.soylocoporti.org.br
-Tags: posts, positioning, schedulling
+Tags: posts, positioning, scheduling
 Requires at least: 3.0
 Tested up to: 3.4.2
 Stable tag: 0.01
@@ -13,7 +13,7 @@ Allow users to schedule custom post loops for different positions of the theme i
 
 In commercial theme development it's common to have different post listings across several positions of the theme. We usually end up creating post types and specific categories for users to put posts in these positions.
 
-This plugin creates a dedicated interface for post positioning and schedulling in the theme. For example, assume you want two different post listings, one for a top slideshow, and another for featured news:
+This plugin creates a dedicated interface for post positioning and scheduling in the theme. For example, assume you want two different post listings, one for a top slideshow, and another for featured news:
 
 Register the positions in your `functions.php`:
 
@@ -65,8 +65,8 @@ Register the positions in your `functions.php`:
 
 Go to the `Positioning` menu in the admin interface and schedule the posts.
 1. Click in `Add New Schedulling` and select a date. The posts you will schedule will be displayed only from this date and on.
-2. Search the posts you want to add to this schedulling.
-3. If desired, change the order by dragging and dropping the posts. You can also change the post title and excerpt for this schedulling.
+2. Search the posts you want to add to this scheduling.
+3. If desired, change the order by dragging and dropping the posts. You can also change the post title and excerpt for this scheduling.
 
 Then, in your templates just use `wp_diagram_get_query( 'position_id' )` to call the scheduled posts:
 
