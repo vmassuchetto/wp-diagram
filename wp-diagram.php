@@ -96,7 +96,7 @@ class WP_Diagram {
     }
 
     function admin_menu() {
-        add_menu_page( __( 'Positioning', 'wp_diagram' ), __( 'Positioning', 'wp_diagram' ),
+        add_menu_page( __( 'Positions', 'wp_diagram' ), __( 'Positions', 'wp_diagram' ),
             'add_users', 'wp_diagram', array( $this, 'admin_post_positions' ),
             $this->plugin_dir_url . 'img/blogs-stack.png'
             , 6 );
