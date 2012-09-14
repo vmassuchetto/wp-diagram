@@ -41,6 +41,8 @@ Then, in your templates just do:
     <?php endwhile; ?>
 <?php endif; ?>
 
+The custom loop above will get the posts scheduled for the `home_slideshow` in the current time.
+
 == Installation ==
 
 1. Download and activate the plugin.
