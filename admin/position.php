@@ -5,6 +5,8 @@
 
     if ( empty( $selected_schedule ) && $first )
         $selected_schedule = $first;
+    elseif (empty( $selected_schedule ) )
+        $selected_schedule = false;
 
     if ( ! empty( $selected_schedule ) && ! empty( $schedule[ $selected_schedule ]->posts ) )
         $posts = $schedule[ $selected_schedule ]->posts;

@@ -144,7 +144,7 @@ class WP_Diagram {
             ORDER BY date ASC
             LIMIT 1
         ", $this->type_schedule, $args['position'], date_i18n( 'Y-m-d H:i:s' ) );
-        $schedule = $wpdb->get_results( $sql );
+        $schedule = $wpdb->get_results( $sql, OBJECT_K );
 
         if ( ! $args['raw'] ) {
             foreach ( array_keys( $schedule ) as $k ) {
@@ -152,9 +152,10 @@ class WP_Diagram {
             }
         }
 
-        if ( ! empty( $schedule[0] ) && $schedule[0]->date < date_i18n( 'Y-m-d H:i:s' ) ) {
-            $schedule[0]->current = true;
-            return $schedule[0];
+        if ( ! empty( $schedule[ key( $schedule ) ] )
+            && $schedule[ key( $schedule ) ]->date < date_i18n( 'Y-m-d H:i:s' ) ) {
+            $schedule[ key( $schedule ) ]->current = true;
+            return $schedule[ key( $schedule ) ];
         }
         return false;
     }
@@ -170,7 +171,7 @@ class WP_Diagram {
         $args = wp_parse_args( $args, $defaults );
 
         $schedules = array();
-        if ( $s = $this->get_current_schedule( $args + array( 'raw' => true ) ) )
+        if ( $s = $this->get_current_schedule( $args ) )
             $schedules[ $s->id ] = $s;
 
         $select = $this->get_schedule_sql_select();
@@ -200,14 +201,14 @@ class WP_Diagram {
             ORDER BY date ASC
             {$limit}
         ";
-        if ( $schedule = $wpdb->get_results( $sql, OBJECT_K ) )
-            $schedules = $schedules + $schedule;
 
+        $schedule = $wpdb->get_results( $sql, OBJECT_K );
         if ( ! $args['raw'] ) {
-            foreach ( array_keys( $schedules ) as $k ) {
-                $schedules[ $k ] = $this->process_schedule( $schedules[ $k ] );
+            foreach ( array_keys( $schedule ) as $k ) {
+                $schedule[ $k ] = $this->process_schedule( $schedule[ $k ] );
             }
         }
+        $schedules = $schedules + $schedule;
 
         if ( ! empty( $args['schedule'] ) )
             return $schedules[ key( $schedules ) ];
@@ -215,10 +216,13 @@ class WP_Diagram {
     }
 
     function process_schedule( $schedule ) {
-        if ( empty( $schedule ) || empty( $schedule->posts ) )
+        if ( empty( $schedule )
+            || empty( $schedule->posts )
+            || ! is_string( $schedule->posts ) )
             return false;
 
         $schedule_posts = json_decode( $schedule->posts );
+
         $posts = array();
         foreach ( $schedule_posts as $p ) {
 
