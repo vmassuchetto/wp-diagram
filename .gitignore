@@ -2,3 +2,6 @@
 *~
 *.swp
 *.swo
+
+# Translation
+lang/wp_diagram.mo
