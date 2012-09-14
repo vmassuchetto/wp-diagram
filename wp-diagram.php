@@ -21,6 +21,7 @@ class WP_Diagram {
 
         $this->plugin_docs_url = 'http://vinicius.soylocoporti.org.br/wp-diagram-wordpress-plugin';
         $this->plugin_basename = plugin_basename( __FILE__ );
+        $this->plugin_basedir = dirname( $this->plugin_basename );
         $this->plugin_dir_path = plugin_dir_path( __FILE__ );
         $this->plugin_dir_url = plugin_dir_url( __FILE__ );
         $this->errors = array();
@@ -28,6 +29,8 @@ class WP_Diagram {
         $this->type_schedule = 'wp_diagram_schedule';
 
         $this->register_structure();
+
+        load_plugin_textdomain( 'wp_diagram', false, $this->plugin_basedir . '/lang/' );
 
         if ( is_admin() ) {
             add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
