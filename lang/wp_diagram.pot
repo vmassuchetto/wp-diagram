@@ -1,0 +1,124 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WP-Diagram\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-09-14 09:31-0300\n"
+"PO-Revision-Date: 2012-09-14 09:31-0300\n"
+"Last-Translator: Vinicius Massuchetto <viniciusmassuchetto@gmail.com>\n"
+"Language-Team: \n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../wp-diagram.php:99
+msgid "Positions"
+msgstr ""
+
+#: ../wp-diagram.php:536
+msgid "Plugin instantiation error."
+msgstr ""
+
+#: ../wp-diagram.php:552
+#, php-format
+msgid "Position \"%s\" not declared in your theme."
+msgstr ""
+
+#: ../wp-diagram.php:568
+msgid "No parameter set for position declaration."
+msgstr ""
+
+#: ../wp-diagram.php:577
+#, php-format
+msgid "Missing \"%s\" argument on position registration."
+msgstr ""
+
+#: ../wp-diagram.php:581
+msgid "Please provide position IDs with only characters, numbers and underscores."
+msgstr ""
+
+#: ../wp-diagram.php:584
+msgid "Position IDs are meant to be unique. You're providing duplicated ones."
+msgstr ""
+
+#: ../admin/post.php:32
+msgid "Edit Post Position"
+msgstr ""
+
+#: ../admin/post.php:34
+msgid "Edit Post"
+msgstr ""
+
+#: ../admin/post.php:39
+msgid "Remove from scheduling"
+msgstr ""
+
+#: ../admin/post.php:45
+msgid "View post"
+msgstr ""
+
+#: ../admin/post.php:58
+msgid "Title"
+msgstr ""
+
+#: ../admin/post.php:62
+msgid "Original Title"
+msgstr ""
+
+#: ../admin/post.php:68
+msgid "Excerpt"
+msgstr ""
+
+#: ../admin/post.php:72
+msgid "Original Excerpt"
+msgstr ""
+
+#: ../admin/post.php:83
+#: ../admin/post.php:84
+msgid "Cancel"
+msgstr ""
+
+#: ../admin/post.php:89
+#: ../admin/post.php:90
+msgid "Update"
+msgstr ""
+
+#: ../admin/position.php:21
+msgid "Add Post"
+msgstr ""
+
+#: ../admin/position.php:26
+msgid "Search by post title"
+msgstr ""
+
+#: ../admin/position.php:28
+msgid "Scheduling"
+msgstr ""
+
+#: ../admin/position.php:35
+msgid "Displaying Now"
+msgstr ""
+
+#: ../admin/position.php:44
+msgid "Add New Scheduling"
+msgstr ""
+
+#: ../admin/position.php:51
+msgid "Delete This Scheduling"
+msgstr ""
+
+#: ../admin/position.php:59
+msgid "Schedule a post position for"
+msgstr ""
+
+#: ../admin/position.php:74
+msgid "Create Copying Current Posts"
+msgstr ""
+
+#: ../admin/positions.php:4
+msgid "Post Positions"
+msgstr ""
+
