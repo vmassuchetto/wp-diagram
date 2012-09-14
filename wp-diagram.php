@@ -2,7 +2,7 @@
 /*
 * Plugin Name: WP-Diagram
 * Plugin URI: http://vinicius.soylocoporti.org.br/wp-diagram-wordpress-plugin
-* Description: Posts diagramming and scheduling across independent positions.
+* Description: Create and schedule custom post loops and display them at any place in your template.
 * Version: 0.01
 * Author: Vinicius Massuchetto
 * Author URI: http://vinicius.soylocoporti.org.br
