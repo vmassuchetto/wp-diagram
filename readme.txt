@@ -7,7 +7,7 @@ Requires at least: 3.0
 Tested up to: 3.4.2
 Stable tag: 0.01
 
-Allow users to schedule custom post loops for different positions of the theme in a widget-like admin interface. Theme developers can display these loops at any place of the theme. It also provides the hability to override the post title and excerpt for each post.
+Allow users to set custom post loops for different positions of the theme in a widget-like admin interface.
 
 == Description ==
 
@@ -26,22 +26,20 @@ Register the positions in your `functions.php`:
         'id' => 'featured_news',
         'name' => 'Featured News'
     )
-) );
+) );`
 
-Go to the `Positioning` menu in the admin interface and schedule the posts.
+Then, after selecting the posts for each position in the `Positioning` menu in the admin interface, just call the custom loop in your template:
 
-Then, in your templates just do:
-
-<?php $slideshow = wp_diagram_get_query( 'home_slideshow' ); ?>
+`<?php $slideshow = wp_diagram_get_query( 'home_slideshow' ); ?>
 <?php if ( $slideshow->have_posts() ) : ?>
     <?php while( $slideshow->have_posts() ) : $slideshow->the_post(); ?>
 
         <?php // Post loop like any other ?>
 
     <?php endwhile; ?>
-<?php endif; ?>
+<?php endif; ?>`
 
-The custom loop above will get the posts scheduled for the `home_slideshow` in the current time.
+The custom loop above will get the posts scheduled for the `home_slideshow` in the current time, and will automatically get new sets of future schedulings if they are set.
 
 == Installation ==
 
@@ -63,7 +61,7 @@ Register the positions in your `functions.php`:
         'id' => 'featured_news',
         'name' => 'Featured News'
     )
-) );
+) );`
 
 Go to the `Positioning` menu in the admin interface and schedule the posts.
 1. Click in `Add New Scheduling` and select a date. The posts you will schedule will be displayed only from this date and on.
@@ -72,14 +70,14 @@ Go to the `Positioning` menu in the admin interface and schedule the posts.
 
 Then, in your templates just use `wp_diagram_get_query( 'position_id' )` to call the scheduled posts:
 
-<?php $slideshow = wp_diagram_get_query( 'slideshow' ); ?>
+`<?php $slideshow = wp_diagram_get_query( 'slideshow' ); ?>
 <?php if ( $slideshow->have_posts() ) : ?>
     <?php while( $slideshow->have_posts() ) : $slideshow->the_post(); ?>
 
         <?php // Post loop like any other ?>
 
     <?php endwhile; ?>
-<?php endif; ?>
+<?php endif; ?>`
 
 == Screenshots ==
 
