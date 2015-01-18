@@ -19,7 +19,7 @@ class WP_Diagram {
 
     function WP_Diagram() {
 
-        $this->plugin_docs_url = 'http://vinicius.soylocoporti.org.br/wp-diagram-wordpress-plugin';
+        $this->plugin_docs_url = 'https://wordpress.org/plugins/wp-diagram/';
         $this->plugin_basename = plugin_basename( __FILE__ );
         $this->plugin_basedir = dirname( $this->plugin_basename );
         $this->plugin_dir_path = plugin_dir_path( __FILE__ );
@@ -97,7 +97,7 @@ class WP_Diagram {
 
     function admin_menu() {
         add_menu_page( __( 'Positions', 'wp_diagram' ), __( 'Positions', 'wp_diagram' ),
-            'add_users', 'wp_diagram', array( $this, 'admin_post_positions' ),
+            'edit_others_posts', 'wp_diagram', array( $this, 'admin_post_positions' ),
             $this->plugin_dir_url . 'img/blogs-stack.png'
             , 6 );
     }
